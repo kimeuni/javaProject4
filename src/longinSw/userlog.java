@@ -10,12 +10,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import adminBoardSw.adminMain;
-import userboardSw.UserMain;
-import javax.swing.JPasswordField;
+import BoardSw.AdminMain;
+import BoardSw.UserMain;
 
 public class userlog extends JFrame {
 
@@ -27,8 +27,7 @@ public class userlog extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					userlog frame = new userlog();
-					frame.setVisible(true);
+					new userlog();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -41,6 +40,7 @@ public class userlog extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500, 350);
 		setLocationRelativeTo(null);
+		setVisible(true);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -103,6 +103,7 @@ public class userlog extends JFrame {
 		// 회원가입
 		btnInput.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose();
 				new UserInput();
 			}
 		});
@@ -110,6 +111,7 @@ public class userlog extends JFrame {
 		// ID/PW 찾기
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose();
 				new UserFindIdPw();
 			}
 		});
@@ -120,7 +122,7 @@ public class userlog extends JFrame {
 				String id = txtId.getText();
 				String pw = txtPw.getText();
 				UserSwDAO dao = new UserSwDAO();
-				UserSwVO vo = dao.getIdSearch(id);
+				UserSwVO uVO = dao.getIdSearch(id);
 				
 				if(id.trim().equals("")) {
 					JOptionPane.showMessageDialog(null, "아이디를 입력해주세요.");
@@ -131,20 +133,22 @@ public class userlog extends JFrame {
 					txtPw.requestFocus();
 				}
 				else {
-					vo = dao.getIdPwSearch(id,pw);
-					if(vo.getId() == null) {
+					uVO = dao.getIdPwSearch(id,pw);
+					if(uVO.getId() == null) {
 						JOptionPane.showMessageDialog(null, "없는 회원입니다. 아이디 혹은 비밀번호를 확인해주세요.");
 						txtId.requestFocus();
 						return;
 					}
 					else {
-						if(vo.getAdminYN().equals("Y")) {
-							new adminMain(vo);
+						if(uVO.getAdminYN().equals("Y")) {
+							dispose();
+							new AdminMain(uVO);
 							txtId.setText("");
 							txtPw.setText("");
 						}
-						else if (vo.getAdminYN().equals("N")) {
-							new UserMain(vo);
+						else if (uVO.getAdminYN().equals("N")) {
+							dispose();
+							new UserMain(uVO);
 							txtId.setText("");
 							txtPw.setText("");
 						}

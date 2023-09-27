@@ -288,6 +288,7 @@ public class UserInput extends JFrame {
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
+				new userlog();
 			}
 		});
 	}

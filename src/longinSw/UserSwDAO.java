@@ -233,5 +233,74 @@ public class UserSwDAO extends ConnDAO {
 			rsClose();
 		}
 		return vo;
-	} 
+	}
+
+	public UserSwVO getMyPSearch(String id, String pw) {
+		vo = new UserSwVO();
+		try {
+			sql = "select * from userSw where id =? and pw = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, pw);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				vo.setIdx(rs.getInt("idx"));
+				vo.setId(rs.getString("id"));
+				vo.setPw(rs.getString("pw"));
+				vo.setEmail(rs.getString("email"));
+				vo.setName(rs.getString("name"));
+				vo.setNickName(rs.getString("nickName"));
+				vo.setAge(rs.getInt("age"));
+				vo.setGender(rs.getString("gender"));
+				vo.setAddress(rs.getString("address"));
+				vo.setAdminYN(rs.getString("adminYN"));
+			}
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 " + e.getMessage());
+		} finally {
+			rsClose();
+		}
+		return vo;
+	}
+
+	// 마이페이지 회원탈퇴 처리
+	public int getDeleteHoiwon(String id) {
+		int res = 0;
+		try {
+			sql = "delete from userSw where id = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			res = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 " + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			pstmtClose();
+		}
+		return res;
+	}
+
+	// 마이페이지 회원수정 처리
+	public int setUpdateHoiwon(UserSwVO vo) {
+		int res = 0;
+		try {
+			sql = "update userSw set pw =?, name =?, address = ? where id = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, vo.getPw());
+			pstmt.setString(2, vo.getName());
+			pstmt.setString(3, vo.getAddress());
+			pstmt.setString(4, vo.getId());
+			res = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 " + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			pstmtClose();
+		}
+		return res;
+	}
 }

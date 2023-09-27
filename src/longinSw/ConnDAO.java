@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ConnDAO {
-	Connection conn = null;
+	public Connection conn = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 	

@@ -229,6 +229,7 @@ public class UserFindIdPw extends JFrame {
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
+				new userlog();
 			}
 		});
 	}
