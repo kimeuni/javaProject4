@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 
 import longinSw.UserSwVO;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -16,14 +18,24 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
 
-public class setUpdatenotices extends JFrame {
+public class setUpdateNotices extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtTitle;
 	private JTextField txtFileName;
-	public setUpdatenotices(UserSwVO vo) {
+	private JComboBox cbcategory;
+	private JTextArea txtaContent;
+	private ImageFileUpdate imageFileUpdate;
+	
+	BoardDAO dao = new BoardDAO();
+	BoardVO bVO = null;
+	int res = 0;
+	
+	public setUpdateNotices(UserSwVO vo) {
 		super("공지사항 글쓰기");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500, 670);
@@ -57,7 +69,7 @@ public class setUpdatenotices extends JFrame {
 		panel.add(panel_2);
 		panel_2.setLayout(null);
 		
-		JComboBox cbcategory = new JComboBox();
+		cbcategory = new JComboBox();
 		cbcategory.setModel(new DefaultComboBoxModel(new String[] {"", "공지사항"}));
 		cbcategory.setBounds(12, 10, 75, 29);
 		panel_2.add(cbcategory);
@@ -76,17 +88,17 @@ public class setUpdatenotices extends JFrame {
 		scrollPane.setBounds(0, 0, 462, 464);
 		panel_3.add(scrollPane);
 		
-		JTextArea textArea = new JTextArea();
-		scrollPane.setViewportView(textArea);
+		txtaContent = new JTextArea();
+		scrollPane.setViewportView(txtaContent);
 		
 		JPanel pnButton = new JPanel();
 		pnButton.setBounds(0, 590, 484, 41);
 		panel.add(pnButton);
 		pnButton.setLayout(null);
 		
-		JButton btnNewButton = new JButton("작성완료");
-		btnNewButton.setBounds(375, 10, 97, 23);
-		pnButton.add(btnNewButton);
+		JButton btnFinish = new JButton("작성완료");
+		btnFinish.setBounds(375, 10, 97, 23);
+		pnButton.add(btnFinish);
 		
 		JButton btnNewButton_1 = new JButton("취소");
 		btnNewButton_1.setBounds(270, 10, 97, 23);
@@ -98,7 +110,6 @@ public class setUpdatenotices extends JFrame {
 		pnFile.setLayout(null);
 		
 		txtFileName = new JTextField();
-		txtFileName.setEditable(false);
 		txtFileName.setBounds(22, 0, 286, 31);
 		pnFile.add(txtFileName);
 		txtFileName.setColumns(10);
@@ -109,6 +120,50 @@ public class setUpdatenotices extends JFrame {
 		
 		/* ================================================= */
 		
+		// 파일 업로드 버튼
+		btnFileUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(imageFileUpdate == null) {
+					imageFileUpdate = new ImageFileUpdate();
+				}
+				txtFileName.setText(imageFileUpdate.getImgUP());
+				System.out.println(txtFileName.getText());
+			}
+		});
+		
+		// 작성완료 버튼
+		btnFinish.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String boardChoice = cbcategory.getSelectedItem().toString();
+				String boardTitle = txtTitle.getText();
+				String boardContent = txtaContent.getText();
+				String boardImage = txtFileName.getText();
+				
+				if(boardChoice.trim().equals("")) JOptionPane.showMessageDialog(null, "카테고리를 선택해주세요.");
+				else if(boardTitle.trim().equals("")) JOptionPane.showMessageDialog(null, "제목을 작성해주세요.");
+				else if(boardContent.trim().equals("")) JOptionPane.showMessageDialog(null, "본문을 작성해주세요.");
+				else {
+					bVO = new BoardVO();
+					bVO.setCategory(boardChoice);
+					bVO.setTitle(boardTitle);
+					bVO.setContent(boardContent);
+					bVO.setNickName(vo.getNickName());
+					bVO.setImage(boardImage);
+					
+					int ans = JOptionPane.showConfirmDialog(null, "작성한 글을 올리시겠습니까?", "작성완료 확인창",JOptionPane.YES_NO_OPTION);
+					if(ans == 0) {
+						res = dao.setNoticesUpdate(bVO);
+						if(res == 0) JOptionPane.showMessageDialog(null, "알 수 없는 오류가 발생하여 글을 올리는 것에 실패했습니다.");
+						else {
+							JOptionPane.showMessageDialog(null, "작성한 글을 게시하였습니다.");
+							dispose();
+						}
+					}
+				}
+			}
+		});
+		
+		// 취소 버튼
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();

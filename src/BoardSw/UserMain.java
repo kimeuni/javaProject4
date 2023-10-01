@@ -25,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import java.awt.SystemColor;
 
 public class UserMain extends JFrame {
 
@@ -199,158 +200,204 @@ public class UserMain extends JFrame {
 		lblNewLabel_3.setBounds(0, 10, 736, 33);
 		pnW.add(lblNewLabel_3);
 		
-		JPanel pnMyP = new JPanel();
-		pnMyP.setBounds(310, 84, 712, 517);
-		pabc.add(pnMyP);
-		pnMyP.setLayout(null);
+		/*=============================================================*/
+//		JPanel pnMyP = new JPanel();
+//		pnMyP.setBounds(310, 84, 712, 517);
+//		pabc.add(pnMyP);
+//		pnMyP.setLayout(null);
+//		
+//		JLabel lblMyInfo = new JLabel("나의 정보");
+//		lblMyInfo.setForeground(new Color(0, 102, 255));
+//		lblMyInfo.setFont(new Font("굴림", Font.BOLD, 24));
+//		lblMyInfo.setBounds(12, 10, 126, 54);
+//		pnMyP.add(lblMyInfo);
+//		
+//		JPanel pnHoiwonInfo = new JPanel();
+//		pnHoiwonInfo.setBounds(12, 53, 688, 397);
+//		pnMyP.add(pnHoiwonInfo);
+//		pnHoiwonInfo.setLayout(null);
+//		
+//		JLabel lblImg = new JLabel("");
+//		if(vo.getGender().equals("남자")) {
+//			ImageIcon iconMale = new ImageIcon(UserMain.class.getResource("/longin/image/men.png"));
+//			Image imgMale =iconMale.getImage();
+//			Image updateImgMale = imgMale.getScaledInstance(183,169, Image.SCALE_SMOOTH);
+//			ImageIcon updateIconMale = new ImageIcon(updateImgMale);
+//			lblImg.setIcon(updateIconMale);
+//			lblImg.setBounds(12, 10, 183, 169);
+//			pnHoiwonInfo.add(lblImg);
+//		}
+//		else {
+//			ImageIcon iconFemale = new ImageIcon(UserMain.class.getResource("/longin/image/Wmen.png"));
+//			Image imgFemale =iconFemale.getImage();
+//			Image updateImgFemale = imgFemale.getScaledInstance(183,169, Image.SCALE_SMOOTH);
+//			ImageIcon updateIconFemale = new ImageIcon(updateImgFemale);
+//			lblImg.setIcon(updateIconFemale);
+//			lblImg.setBounds(12, 10, 183,169);
+//			pnHoiwonInfo.add(lblImg);
+//		}
+//			
+//			JLabel lblNewLabel = new JLabel("성명");
+//			lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+//			lblNewLabel.setFont(new Font("굴림", Font.BOLD, 16));
+//			lblNewLabel.setBounds(226, 9, 124, 36);
+//			pnHoiwonInfo.add(lblNewLabel);
+//			
+//			JLabel lblNewLabel_1 = new JLabel("아이디");
+//			lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+//			lblNewLabel_1.setFont(new Font("굴림", Font.BOLD, 16));
+//			lblNewLabel_1.setBounds(226, 151, 124, 36);
+//			pnHoiwonInfo.add(lblNewLabel_1);
+//			
+//			JLabel lblNewLabel_1_1 = new JLabel("현재 비밀번호");
+//			lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
+//			lblNewLabel_1_1.setFont(new Font("굴림", Font.BOLD, 16));
+//			lblNewLabel_1_1.setBounds(226, 194, 124, 36);
+//			pnHoiwonInfo.add(lblNewLabel_1_1);
+//			
+//			JLabel lblNewLabel_1_1_1 = new JLabel("수정 비밀번호");
+//			lblNewLabel_1_1_1.setHorizontalAlignment(SwingConstants.CENTER);
+//			lblNewLabel_1_1_1.setFont(new Font("굴림", Font.BOLD, 16));
+//			lblNewLabel_1_1_1.setBounds(226, 240, 124, 36);
+//			pnHoiwonInfo.add(lblNewLabel_1_1_1);
+//			
+//			txtName = new JTextField();
+//			txtName.setFont(new Font("굴림", Font.PLAIN, 16));
+//			txtName.setBounds(384, 10, 241, 36);
+//			txtName.setText(vo.getName());
+//			pnHoiwonInfo.add(txtName);
+//			txtName.setColumns(10);
+//			
+//			txtId = new JTextField();
+//			txtId.setEditable(false);
+//			txtId.setFont(new Font("굴림", Font.PLAIN, 16));
+//			txtId.setColumns(10);
+//			txtId.setBounds(384, 151, 241, 36);
+//			txtId.setText(vo.getId());
+//			pnHoiwonInfo.add(txtId);
+//			
+//			txtBeforePw = new JTextField();
+//			txtBeforePw.setEditable(false);
+//			txtBeforePw.setFont(new Font("굴림", Font.PLAIN, 16));
+//			txtBeforePw.setColumns(10);
+//			txtBeforePw.setBounds(384, 194, 241, 36);
+//			txtBeforePw.setText(vo.getPw());
+//			pnHoiwonInfo.add(txtBeforePw);
+//			
+//			txtAfterPw = new JTextField();
+//			txtAfterPw.setFont(new Font("굴림", Font.PLAIN, 16));
+//			txtAfterPw.setColumns(10);
+//			txtAfterPw.setBounds(384, 241, 241, 36);
+//			txtAfterPw.setText(vo.getPw());
+//			pnHoiwonInfo.add(txtAfterPw);
+//			
+//			JLabel lblNewLabel_4 = new JLabel("닉네임");
+//			lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
+//			lblNewLabel_4.setFont(new Font("굴림", Font.BOLD, 16));
+//			lblNewLabel_4.setBounds(226, 56, 124, 36);
+//			pnHoiwonInfo.add(lblNewLabel_4);
+//			
+//			txtNickname = new JTextField();
+//			txtNickname.setEditable(false);
+//			txtNickname.setFont(new Font("굴림", Font.PLAIN, 16));
+//			txtNickname.setColumns(10);
+//			txtNickname.setBounds(384, 57, 241, 36);
+//			txtNickname.setText(vo.getNickName());
+//			pnHoiwonInfo.add(txtNickname);
+//			
+//			JLabel lblNewLabel_4_1 = new JLabel("주소");
+//			lblNewLabel_4_1.setHorizontalAlignment(SwingConstants.CENTER);
+//			lblNewLabel_4_1.setFont(new Font("굴림", Font.BOLD, 16));
+//			lblNewLabel_4_1.setBounds(226, 287, 124, 36);
+//			pnHoiwonInfo.add(lblNewLabel_4_1);
+//			
+//			JScrollPane scrollPane = new JScrollPane();
+//			scrollPane.setBounds(384, 288, 241, 99);
+//			pnHoiwonInfo.add(scrollPane);
+//			
+//			JTextArea txtaAddress = new JTextArea();
+//			txtaAddress.setText(vo.getAddress());
+//			scrollPane.setViewportView(txtaAddress);
+//			
+//			JLabel lblNewLabel_1_2 = new JLabel("이메일");
+//			lblNewLabel_1_2.setHorizontalAlignment(SwingConstants.CENTER);
+//			lblNewLabel_1_2.setFont(new Font("굴림", Font.BOLD, 16));
+//			lblNewLabel_1_2.setBounds(226, 105, 124, 36);
+//			pnHoiwonInfo.add(lblNewLabel_1_2);
+//			
+//			txtEmail = new JTextField();
+//			txtEmail.setText((String) null);
+//			txtEmail.setFont(new Font("굴림", Font.PLAIN, 16));
+//			txtEmail.setEditable(false);
+//			txtEmail.setColumns(10);
+//			txtEmail.setBounds(384, 105, 241, 36);
+//			txtEmail.setText(vo.getEmail());
+//			pnHoiwonInfo.add(txtEmail);
+//			
+//			JPanel pnHoiwonButton = new JPanel();
+//			pnHoiwonButton.setBounds(12, 460, 688, 47);
+//			pnMyP.add(pnHoiwonButton);
+//			pnHoiwonButton.setLayout(null);
+//			
+//			JButton btnMypDrop = new JButton("회원탈퇴");
+//			btnMypDrop.setBounds(74, 10, 130, 27);
+//			pnHoiwonButton.add(btnMypDrop);
+//			
+//			JButton btnCancel = new JButton("취소");
+//			btnCancel.setBounds(482, 12, 130, 27);
+//			pnHoiwonButton.add(btnCancel);
+//			
+//			JButton btnMypUpdate = new JButton("수정");
+//			btnMypUpdate.setBounds(278, 12, 130, 27);
+//			pnHoiwonButton.add(btnMypUpdate);
+		/*=============================================================*/
+		JPanel pnDisplay = new JPanel();
+		pnDisplay.setBounds(310, 84, 712, 517);
+		pabc.add(pnDisplay);
+		pnDisplay.setLayout(null);
 		
-		JLabel lblMyInfo = new JLabel("나의 정보");
-		lblMyInfo.setForeground(new Color(0, 102, 255));
-		lblMyInfo.setFont(new Font("굴림", Font.BOLD, 24));
-		lblMyInfo.setBounds(12, 10, 126, 54);
-		pnMyP.add(lblMyInfo);
+		JPanel pnLbl = new JPanel();
+		pnLbl.setBounds(0, 0, 712, 53);
+		pnDisplay.add(pnLbl);
+		pnLbl.setLayout(null);
 		
-		JPanel pnHoiwonInfo = new JPanel();
-		pnHoiwonInfo.setBounds(12, 53, 688, 397);
-		pnMyP.add(pnHoiwonInfo);
-		pnHoiwonInfo.setLayout(null);
+		JLabel lblMyMsg = new JLabel("내가 작성한 게시판");
+		lblMyMsg.setForeground(SystemColor.textHighlight);
+		lblMyMsg.setFont(new Font("굴림", Font.BOLD, 24));
+		lblMyMsg.setBounds(12, 0, 324, 53);
+		pnLbl.add(lblMyMsg);
 		
-		JLabel lblImg = new JLabel("");
-		if(vo.getGender().equals("남자")) {
-			ImageIcon iconMale = new ImageIcon(UserMain.class.getResource("/longin/image/men.png"));
-			Image imgMale =iconMale.getImage();
-			Image updateImgMale = imgMale.getScaledInstance(183,169, Image.SCALE_SMOOTH);
-			ImageIcon updateIconMale = new ImageIcon(updateImgMale);
-			lblImg.setIcon(updateIconMale);
-			lblImg.setBounds(12, 10, 183, 169);
-			pnHoiwonInfo.add(lblImg);
-		}
-		else {
-			ImageIcon iconFemale = new ImageIcon(UserMain.class.getResource("/longin/image/Wmen.png"));
-			Image imgFemale =iconFemale.getImage();
-			Image updateImgFemale = imgFemale.getScaledInstance(183,169, Image.SCALE_SMOOTH);
-			ImageIcon updateIconFemale = new ImageIcon(updateImgFemale);
-			lblImg.setIcon(updateIconFemale);
-			lblImg.setBounds(12, 10, 183,169);
-			pnHoiwonInfo.add(lblImg);
-		}
-			
-			JLabel lblNewLabel = new JLabel("성명");
-			lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel.setFont(new Font("굴림", Font.BOLD, 16));
-			lblNewLabel.setBounds(226, 9, 124, 36);
-			pnHoiwonInfo.add(lblNewLabel);
-			
-			JLabel lblNewLabel_1 = new JLabel("아이디");
-			lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_1.setFont(new Font("굴림", Font.BOLD, 16));
-			lblNewLabel_1.setBounds(226, 151, 124, 36);
-			pnHoiwonInfo.add(lblNewLabel_1);
-			
-			JLabel lblNewLabel_1_1 = new JLabel("현재 비밀번호");
-			lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_1_1.setFont(new Font("굴림", Font.BOLD, 16));
-			lblNewLabel_1_1.setBounds(226, 194, 124, 36);
-			pnHoiwonInfo.add(lblNewLabel_1_1);
-			
-			JLabel lblNewLabel_1_1_1 = new JLabel("수정 비밀번호");
-			lblNewLabel_1_1_1.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_1_1_1.setFont(new Font("굴림", Font.BOLD, 16));
-			lblNewLabel_1_1_1.setBounds(226, 240, 124, 36);
-			pnHoiwonInfo.add(lblNewLabel_1_1_1);
-			
-			txtName = new JTextField();
-			txtName.setFont(new Font("굴림", Font.PLAIN, 16));
-			txtName.setBounds(384, 10, 241, 36);
-			txtName.setText(vo.getName());
-			pnHoiwonInfo.add(txtName);
-			txtName.setColumns(10);
-			
-			txtId = new JTextField();
-			txtId.setEditable(false);
-			txtId.setFont(new Font("굴림", Font.PLAIN, 16));
-			txtId.setColumns(10);
-			txtId.setBounds(384, 151, 241, 36);
-			txtId.setText(vo.getId());
-			pnHoiwonInfo.add(txtId);
-			
-			txtBeforePw = new JTextField();
-			txtBeforePw.setEditable(false);
-			txtBeforePw.setFont(new Font("굴림", Font.PLAIN, 16));
-			txtBeforePw.setColumns(10);
-			txtBeforePw.setBounds(384, 194, 241, 36);
-			txtBeforePw.setText(vo.getPw());
-			pnHoiwonInfo.add(txtBeforePw);
-			
-			txtAfterPw = new JTextField();
-			txtAfterPw.setFont(new Font("굴림", Font.PLAIN, 16));
-			txtAfterPw.setColumns(10);
-			txtAfterPw.setBounds(384, 241, 241, 36);
-			txtAfterPw.setText(vo.getPw());
-			pnHoiwonInfo.add(txtAfterPw);
-			
-			JLabel lblNewLabel_4 = new JLabel("닉네임");
-			lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_4.setFont(new Font("굴림", Font.BOLD, 16));
-			lblNewLabel_4.setBounds(226, 56, 124, 36);
-			pnHoiwonInfo.add(lblNewLabel_4);
-			
-			txtNickname = new JTextField();
-			txtNickname.setEditable(false);
-			txtNickname.setFont(new Font("굴림", Font.PLAIN, 16));
-			txtNickname.setColumns(10);
-			txtNickname.setBounds(384, 57, 241, 36);
-			txtNickname.setText(vo.getNickName());
-			pnHoiwonInfo.add(txtNickname);
-			
-			JLabel lblNewLabel_4_1 = new JLabel("주소");
-			lblNewLabel_4_1.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_4_1.setFont(new Font("굴림", Font.BOLD, 16));
-			lblNewLabel_4_1.setBounds(226, 287, 124, 36);
-			pnHoiwonInfo.add(lblNewLabel_4_1);
-			
-			JScrollPane scrollPane = new JScrollPane();
-			scrollPane.setBounds(384, 288, 241, 99);
-			pnHoiwonInfo.add(scrollPane);
-			
-			JTextArea txtaAddress = new JTextArea();
-			txtaAddress.setText(vo.getAddress());
-			scrollPane.setViewportView(txtaAddress);
-			
-			JLabel lblNewLabel_1_2 = new JLabel("이메일");
-			lblNewLabel_1_2.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_1_2.setFont(new Font("굴림", Font.BOLD, 16));
-			lblNewLabel_1_2.setBounds(226, 105, 124, 36);
-			pnHoiwonInfo.add(lblNewLabel_1_2);
-			
-			txtEmail = new JTextField();
-			txtEmail.setText((String) null);
-			txtEmail.setFont(new Font("굴림", Font.PLAIN, 16));
-			txtEmail.setEditable(false);
-			txtEmail.setColumns(10);
-			txtEmail.setBounds(384, 105, 241, 36);
-			txtEmail.setText(vo.getEmail());
-			pnHoiwonInfo.add(txtEmail);
-			
-			JPanel pnHoiwonButton = new JPanel();
-			pnHoiwonButton.setBounds(12, 460, 688, 47);
-			pnMyP.add(pnHoiwonButton);
-			pnHoiwonButton.setLayout(null);
-			
-			JButton btnMypDrop = new JButton("회원탈퇴");
-			btnMypDrop.setBounds(74, 10, 130, 27);
-			pnHoiwonButton.add(btnMypDrop);
-			
-			JButton btnCancel = new JButton("취소");
-			btnCancel.setBounds(482, 12, 130, 27);
-			pnHoiwonButton.add(btnCancel);
-			
-			JButton btnMypUpdate = new JButton("수정");
-			btnMypUpdate.setBounds(278, 12, 130, 27);
-			pnHoiwonButton.add(btnMypUpdate);
-
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(10, 54, 690, 40);
+		pnDisplay.add(panel_1);
+		panel_1.setLayout(null);
 		
-		pnMyP.setVisible(false);
+		JButton btnMyAllBoard = new JButton("내가 작성한 모든 게시판");
+		btnMyAllBoard.setBounds(98, 6, 197, 28);
+		panel_1.add(btnMyAllBoard);
+		
+		JButton btnMyDisplayN = new JButton("나만보기 게시판");
+		btnMyDisplayN.setBounds(393, 7, 197, 28);
+		panel_1.add(btnMyDisplayN);
+		
+		JPanel pnMyAllBoard = new JPanel();
+		pnMyAllBoard.setBounds(12, 99, 688, 347);
+		pnDisplay.add(pnMyAllBoard);
+		pnMyAllBoard.setLayout(null);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(0, 0, 688, 347);
+		pnMyAllBoard.add(scrollPane);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setBackground(SystemColor.activeCaption);
+		panel_2.setBounds(0, 445, 712, 72);
+		pnDisplay.add(panel_2);
+		panel_2.setLayout(null);
+		
+		
+//		pnMyP.setVisible(false);
+		pnDisplay.setVisible(false);
 		
 		/*===========================================================*/
 		/*  메인메뉴 관리  */
@@ -365,7 +412,7 @@ public class UserMain extends JFrame {
 				if(uVO.getPw() == null) {
 					JOptionPane.showMessageDialog(null, "비밀번호를 다시 확인해주세요.");
 				}
-				else pnMyP.setVisible(true);
+//				else pnMyP.setVisible(true);
 			}
 		});
 		
@@ -398,72 +445,72 @@ public class UserMain extends JFrame {
 			}
 		});
 
-		// 마이페이지 회원탈퇴
-		btnMypDrop.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int ans = JOptionPane.showConfirmDialog(null, "정말로 회원을 탈퇴하시겠습니까?","회원탈퇴",JOptionPane.YES_NO_OPTION);
-				if(ans == 0) {
-					res = dao.getDeleteHoiwon(vo.getId());
-					if(res == 0) {
-						JOptionPane.showMessageDialog(null, "문제가 발생하여 회원 삭제를 하지 못했습니다.");
-					}
-					else {
-						JOptionPane.showMessageDialog(null, vo.getName()+"님의 계정을 삭제하였습니다.");
-						dispose();
-						new userlog();
-					}
-				}
-				else {}
-			}
-		});
-		
-		// 마이페이지 수정
-		btnMypUpdate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String id = txtId.getText();
-				String name = txtName.getText();
-				String pw = txtAfterPw.getText();
-				String address = txtaAddress.getText();
-				
-				if(name.trim().equals("")) {
-					JOptionPane.showMessageDialog(null, "수정한 성명을 입력해주세요.");
-				}
-				else if(!Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$", pw)) {
-					JOptionPane.showMessageDialog(null, "비밀번호는 8~20자 사이, 소문자,대문자,숫자,특수문자를 1개 이상 입력해야 합니다.");
-				}
-				else {
-					int ans = JOptionPane.showConfirmDialog(null, "회원정보를 수정하시겠습니까?","회원수정",JOptionPane.YES_NO_OPTION);
-					if(ans == 0) {
-						vo.setId(id);
-						vo.setName(name);
-						vo.setPw(pw);
-						vo.setAddress(address);
-						res = dao.setUpdateHoiwon(vo);
-						if(res == 0) {
-							JOptionPane.showMessageDialog(null, "문제가 발생하여 회원 수정을 하지 못했습니다.");
-						}
-						else {
-							JOptionPane.showMessageDialog(null, vo.getName()+"님의 계정 정보를 수정하였습니다.");
-							btnCancel.doClick();
-						}
-					}
-					else {}
-				}
-			}
-		});
-		
-		// 마이페이지 취소
-		btnCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				txtName.setText(vo.getName());
-				txtNickname.setText(vo.getNickName());
-				txtEmail.setText(vo.getEmail());
-				txtId.setText(vo.getId());
-				txtBeforePw.setText(vo.getPw());
-				txtAfterPw.setText("");
-				txtaAddress.setText(vo.getAddress());
-				pnMyP.setVisible(false);
-			}
-		});
+//		// 마이페이지 회원탈퇴
+//		btnMypDrop.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				int ans = JOptionPane.showConfirmDialog(null, "정말로 회원을 탈퇴하시겠습니까?","회원탈퇴",JOptionPane.YES_NO_OPTION);
+//				if(ans == 0) {
+//					res = dao.getDeleteHoiwon(vo.getId());
+//					if(res == 0) {
+//						JOptionPane.showMessageDialog(null, "문제가 발생하여 회원 삭제를 하지 못했습니다.");
+//					}
+//					else {
+//						JOptionPane.showMessageDialog(null, vo.getName()+"님의 계정을 삭제하였습니다.");
+//						dispose();
+//						new userlog();
+//					}
+//				}
+//				else {}
+//			}
+//		});
+//		
+//		// 마이페이지 수정
+//		btnMypUpdate.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				String id = txtId.getText();
+//				String name = txtName.getText();
+//				String pw = txtAfterPw.getText();
+//				String address = txtaAddress.getText();
+//				
+//				if(name.trim().equals("")) {
+//					JOptionPane.showMessageDialog(null, "수정한 성명을 입력해주세요.");
+//				}
+//				else if(!Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$", pw)) {
+//					JOptionPane.showMessageDialog(null, "비밀번호는 8~20자 사이, 소문자,대문자,숫자,특수문자를 1개 이상 입력해야 합니다.");
+//				}
+//				else {
+//					int ans = JOptionPane.showConfirmDialog(null, "회원정보를 수정하시겠습니까?","회원수정",JOptionPane.YES_NO_OPTION);
+//					if(ans == 0) {
+//						vo.setId(id);
+//						vo.setName(name);
+//						vo.setPw(pw);
+//						vo.setAddress(address);
+//						res = dao.setUpdateHoiwon(vo);
+//						if(res == 0) {
+//							JOptionPane.showMessageDialog(null, "문제가 발생하여 회원 수정을 하지 못했습니다.");
+//						}
+//						else {
+//							JOptionPane.showMessageDialog(null, vo.getName()+"님의 계정 정보를 수정하였습니다.");
+//							btnCancel.doClick();
+//						}
+//					}
+//					else {}
+//				}
+//			}
+//		});
+//		
+//		// 마이페이지 취소
+//		btnCancel.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				txtName.setText(vo.getName());
+//				txtNickname.setText(vo.getNickName());
+//				txtEmail.setText(vo.getEmail());
+//				txtId.setText(vo.getId());
+//				txtBeforePw.setText(vo.getPw());
+//				txtAfterPw.setText("");
+//				txtaAddress.setText(vo.getAddress());
+//				pnMyP.setVisible(false);
+//			}
+//		});
 	}
 }

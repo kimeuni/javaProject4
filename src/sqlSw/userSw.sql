@@ -16,3 +16,5 @@ create table userSw(
 insert into userSw (id,pw,email,name,nickName,age,gender,adminYN) values ('admin','1234','ax1234@naver.com','어드민','어드민',24,'여자','Y');
 
 select * from userSw;
+
+alter table userSw add column number int;

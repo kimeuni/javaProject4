@@ -216,6 +216,14 @@ public class UserInput extends JFrame {
 					JOptionPane.showMessageDialog(null, "닉네임을 입력하세요.");
 					txtNickName.requestFocus();
 				}
+				else if(nickName.length() >=9) {
+					JOptionPane.showMessageDialog(null, "닉네임은 최대 8글자까지 작성할 수 있습니다.");
+					txtNickName.requestFocus();
+				}
+				else if(age.trim().equals("")) {
+					JOptionPane.showMessageDialog(null, "나이는 숫자로만 입력 가능합니다.");
+					txtAge.requestFocus();
+				}
 				else if(!Pattern.matches("^[0-9]*$", age)) {
 					JOptionPane.showMessageDialog(null, "나이는 숫자로만 입력 가능합니다.");
 					txtAge.requestFocus();

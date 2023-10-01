@@ -4,6 +4,9 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -116,44 +119,26 @@ public class userlog extends JFrame {
 			}
 		});
 		
-		// 로그인
+		// 로그인 버튼 클릭
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String id = txtId.getText();
-				String pw = txtPw.getText();
-				UserSwDAO dao = new UserSwDAO();
-				UserSwVO uVO = dao.getIdSearch(id);
-				
-				if(id.trim().equals("")) {
-					JOptionPane.showMessageDialog(null, "아이디를 입력해주세요.");
-					txtId.requestFocus();
-				}
-				else if(txtPw.getText().trim().equals("")) {
-					JOptionPane.showMessageDialog(null, "비밀번호를 입력해주세요.");
-					txtPw.requestFocus();
-				}
-				else {
-					uVO = dao.getIdPwSearch(id,pw);
-					if(uVO.getId() == null) {
-						JOptionPane.showMessageDialog(null, "없는 회원입니다. 아이디 혹은 비밀번호를 확인해주세요.");
-						txtId.requestFocus();
-						return;
-					}
-					else {
-						if(uVO.getAdminYN().equals("Y")) {
-							dispose();
-							new AdminMain(uVO);
-							txtId.setText("");
-							txtPw.setText("");
-						}
-						else if (uVO.getAdminYN().equals("N")) {
-							dispose();
-							new UserMain(uVO);
-							txtId.setText("");
-							txtPw.setText("");
-						}
-					}
-				}
+				longinCheck();
+			}
+		});
+		
+		// 로그인 패스워드 텍스트에서 엔터
+		txtPw.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) longinCheck();
+			}
+		});
+		
+		// 로그인 아이디 텍스트에서 엔터
+		txtId.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) longinCheck();
 			}
 		});
 		
@@ -163,5 +148,44 @@ public class userlog extends JFrame {
 				System.exit(0);
 			}
 		});
+	}
+	
+	// 로그인 유효성 검사 및 접속
+	private void longinCheck() {
+		String id = txtId.getText();
+		String pw = txtPw.getText();
+		UserSwDAO dao = new UserSwDAO();
+		UserSwVO uVO = dao.getIdSearch(id);
+		
+		if(id.trim().equals("")) {
+			JOptionPane.showMessageDialog(null, "아이디를 입력해주세요.");
+			txtId.requestFocus();
+		}
+		else if(txtPw.getText().trim().equals("")) {
+			JOptionPane.showMessageDialog(null, "비밀번호를 입력해주세요.");
+			txtPw.requestFocus();
+		}
+		else {
+			uVO = dao.getIdPwSearch(id,pw);
+			if(uVO.getId() == null) {
+				JOptionPane.showMessageDialog(null, "없는 회원입니다. 아이디 혹은 비밀번호를 확인해주세요.");
+				txtId.requestFocus();
+				return;
+			}
+			else {
+				if(uVO.getAdminYN().equals("Y")) {
+					dispose();
+					new AdminMain(uVO);
+					txtId.setText("");
+					txtPw.setText("");
+				}
+				else if (uVO.getAdminYN().equals("N")) {
+					dispose();
+					new UserMain(uVO);
+					txtId.setText("");
+					txtPw.setText("");
+				}
+			}
+		}
 	}
 }

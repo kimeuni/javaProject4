@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -21,6 +22,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 import longinSw.UserSwVO;
 import longinSw.userlog;
@@ -30,7 +34,16 @@ public class MainBoards extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
+	private JScrollPane scrollPaneNot;
+	private DefaultTableModel dtm;
+	private JTable table;
+	
+	private Vector noticesTitle, nData;
+	
+	BoardDAO dao = new BoardDAO();
+	BoardVO bVO = null;
 
+	@SuppressWarnings("unchecked")
 	public MainBoards(UserSwVO vo) {
 		super("취미모아 게시판");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -205,7 +218,7 @@ public class MainBoards extends JFrame {
 		
 		JComboBox comboBox = new JComboBox();
 		comboBox.setFont(new Font("굴림", Font.PLAIN, 16));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"제목", "내용"}));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"", "제목", "작성자"}));
 		comboBox.setBounds(12, 10, 81, 33);
 		panel_1.add(comboBox);
 		
@@ -220,23 +233,49 @@ public class MainBoards extends JFrame {
 		btnNewButton_1.setBounds(296, 10, 68, 33);
 		panel_1.add(btnNewButton_1);
 		
+		JButton btnNewButton = new JButton("새로고침");
+		btnNewButton.setFont(new Font("굴림", Font.PLAIN, 16));
+		btnNewButton.setBounds(589, 10, 111, 33);
+		panel_1.add(btnNewButton);
+		
 		JPanel pnNoticesBoard = new JPanel();
 		pnNoticesBoard.setBounds(0, 61, 712, 395);
 		pnNotices.add(pnNoticesBoard);
 		pnNoticesBoard.setLayout(null);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(0, 0, 712, 395);
-		pnNoticesBoard.add(scrollPane);
+		noticesTitle = new Vector<>();
+		noticesTitle.add("번호");
+		noticesTitle.add("카테고리");
+		noticesTitle.add("제목");
+		noticesTitle.add("작성자");
+		noticesTitle.add("날짜");
+		noticesTitle.add("좋아요");
+		noticesTitle.add("조회수");
+		
+		nData = dao.getBoardList("category","공지사항","Y");
+		
+		dtm = new DefaultTableModel(nData, noticesTitle);
+		
+		table = new JTable(dtm);
+		
+		tableCellAlign(table);
+		
+		scrollPaneNot = new JScrollPane(table);
+		scrollPaneNot.setBounds(0, 0, 712, 395);
+		pnNoticesBoard.add(scrollPaneNot);
 		
 		JPanel panel_1_2 = new JPanel();
 		panel_1_2.setBounds(0, 466, 712, 51);
 		pnNotices.add(panel_1_2);
 		panel_1_2.setLayout(null);
 		
-		JButton btnNewButton = new JButton("글쓰기");
-		btnNewButton.setBounds(585, 10, 115, 31);
-		panel_1_2.add(btnNewButton);
+		JButton btnWrite = new JButton("글쓰기");
+		btnWrite.setBounds(585, 10, 115, 31);
+		panel_1_2.add(btnWrite);
+		
+		JButton btnRead = new JButton("글보기");
+		btnRead.setBounds(449, 10, 115, 31);
+		panel_1_2.add(btnRead);
 		
 		
 		pnNotices.setVisible(false);
@@ -281,16 +320,61 @@ public class MainBoards extends JFrame {
 			}
 		});
 		
-		// 공지사항 처리
-		btnNewButton.addActionListener(new ActionListener() {
+		/*===========================================================*/
+		/*  공지사항  */
+		// 공지사항 글쓰기 처리
+		btnWrite.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(vo.getId().equals("admin")) {
-					new setUpdatenotices(vo);
+					new setUpdateNotices(vo);
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "공지사항은 관리자만 작성할 수 있습니다.");
 				}
 			}
 		});
+		
+		// 공지사항 글보기
+		// 공지사항 글보기를 눌렀을 시 조회수 올라가기
+		btnRead.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row = table.getSelectedRow();
+				
+				int idx = (int)table.getValueAt(row, 0);
+				String category = table.getValueAt(row, 1).toString();
+				String title = table.getValueAt(row, 2).toString();
+				String nickName = table.getValueAt(row, 3).toString();
+				int ViewCnt = (int)table.getValueAt(row, 6);
+				
+				dao.getViewCnt(idx,category,title,nickName,ViewCnt); // 글보기 클릭시 조회수 +1
+				bVO = dao.getReadBoard(idx,category,title,nickName);
+				
+				new BoardRead(vo, bVO);
+			}
+		});
+		
+		
+		// 새로고침
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nData = dao.getBoardList("category","공지사항","Y");
+				dtm.setDataVector(nData, noticesTitle);
+				tableCellAlign(table);
+			}
+		});
+	}
+	
+	/* ==================================================================== */
+	/* 불러와서 사용할 메소드들 */
+	// 리스트 가운데로 정렬
+	private void tableCellAlign(JTable table) {
+		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+		dtcr.setHorizontalAlignment(SwingConstants.CENTER);	
+		
+		TableColumnModel tcm = table.getColumnModel();	
+		
+		for(int i=0; i<tcm.getColumnCount(); i++) {
+			tcm.getColumn(i).setCellRenderer(dtcr);	
+		}
 	}
 }

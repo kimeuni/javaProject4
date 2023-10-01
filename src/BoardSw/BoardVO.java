@@ -11,7 +11,9 @@ public class BoardVO {
 	private String writedate;
 	private String nickName;
 	private int viewCnt;
-	private String varchar;
+	private String image;
+	
+	
 	public int getIdx() {
 		return idx;
 	}
@@ -72,16 +74,16 @@ public class BoardVO {
 	public void setViewCnt(int viewCnt) {
 		this.viewCnt = viewCnt;
 	}
-	public String getVarchar() {
-		return varchar;
+	public String getImage() {
+		return image;
 	}
-	public void setVarchar(String varchar) {
-		this.varchar = varchar;
+	public void setImage(String image) {
+		this.image = image;
 	}
 	@Override
 	public String toString() {
 		return "BoardVO [idx=" + idx + ", category=" + category + ", title=" + title + ", content=" + content
 				+ ", displayYN=" + displayYN + ", reportYN=" + reportYN + ", likes=" + likes + ", writedate="
-				+ writedate + ", nickName=" + nickName + ", viewCnt=" + viewCnt + ", varchar=" + varchar + "]";
+				+ writedate + ", nickName=" + nickName + ", viewCnt=" + viewCnt + ", image=" + image + "]";
 	}
 }

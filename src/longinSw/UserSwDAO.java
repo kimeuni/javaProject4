@@ -3,6 +3,7 @@ package longinSw;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Vector;
 
 public class UserSwDAO extends ConnDAO {
 	PreparedStatement pstmt = null;
@@ -124,7 +125,7 @@ public class UserSwDAO extends ConnDAO {
 	public int setUserSwInput(UserSwVO vo) {
 		int res = 0;
 		try {
-			sql = "insert into userSw values (default,?,?,?,?,?,?,?,?,default)";
+			sql = "insert into userSw (id,pw,email,name,nickName,age,gender,address) values (?,?,?,?,?,?,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, vo.getId());
 			pstmt.setString(2, vo.getPw());
@@ -138,6 +139,7 @@ public class UserSwDAO extends ConnDAO {
 			
 		} catch (SQLException e) {
 			System.out.println("SQL 오류 " + e.getMessage());
+			e.printStackTrace();
 		} finally {
 			pstmtClose();
 		}
@@ -303,4 +305,72 @@ public class UserSwDAO extends ConnDAO {
 		}
 		return res;
 	}
+
+	// 회원관리 테이블 전체 리스트
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Vector getUserTableList() {
+		Vector userData = new Vector<>();
+		int cnt = 1;
+		try {
+			sql = "select * from userSw";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Vector vo = new Vector<>();
+				vo.add(cnt);
+//				vo.add(rs.getInt("number"));
+				vo.add(rs.getString("id"));
+				vo.add(rs.getString("name"));
+				vo.add(rs.getString("nickName"));
+				vo.add(rs.getInt("age"));
+				vo.add(rs.getString("gender"));
+				cnt++;
+				userData.add(vo);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 " + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			rsClose();
+		}
+		return userData;
+	}
+
+	// 회원관리 조건검색
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Vector getHoiwonSearch(String cbChoice, String txtSearchs) {
+		Vector userData = new Vector<>();
+		int cnt = 1;
+		try {
+			sql = "select * from userSw where " + cbChoice + " like ? order by idx";
+			pstmt = conn.prepareStatement(sql);
+			
+			if(cbChoice.equals("age")) pstmt.setInt(1, Integer.parseInt(txtSearchs));
+			else pstmt.setString(1, "%" + txtSearchs + "%");
+			
+			rs = pstmt.executeQuery();
+			
+			
+			while(rs.next()) {
+				Vector vo = new Vector<>();
+				vo.add(cnt);
+				vo.add(rs.getString("id"));
+				vo.add(rs.getString("name"));
+				vo.add(rs.getString("nickName"));
+				vo.add(rs.getInt("age"));
+				vo.add(rs.getString("gender"));
+				cnt++;
+				userData.add(vo);
+			}
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 " + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			rsClose();
+		}
+		return userData;
+	}
+	
 }
