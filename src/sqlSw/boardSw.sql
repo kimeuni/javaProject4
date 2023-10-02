@@ -17,6 +17,7 @@ create table boardSw(
 
 insert into boardSw (category,title,content,nickName,image) values ('공지사항','테스트용 공지사항','확인용 공지사항','어드민','');
 insert into boardSw (category,title,content,nickName,reportYN,image) values ('게임','게임 게시판','신고 리스트 확인용 글','홍길','Y','');
+insert into boardSw (category,title,content,nickName,reportYN,image) values ('게임','게임 게시판','신고 리스트 확인용 글','홍길','Y','');
 
 drop table boardSw;
 

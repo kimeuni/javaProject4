@@ -58,10 +58,7 @@ public class BoardRead extends JFrame {
 		panel_1.add(scrollPane);
 		
 		JTextArea txtaContent = new JTextArea();
-		if(!vo.getAdminYN().equals("Y")) {
-			txtaContent.setEditable(false);
-			txtaContent.setEnabled(false);
-		}
+		txtaContent.setEditable(false);
 		txtaContent.setText(bVO.getContent());
 		scrollPane.setViewportView(txtaContent);
 		
@@ -118,14 +115,14 @@ public class BoardRead extends JFrame {
 		}
 		
 		JButton btnDisplay = new JButton("나만보기");
-		if(vo.getAdminYN().equals("N") && vo.getNickName().equals(bVO.getNickName())) {
+		if(vo.getNickName().equals(bVO.getNickName())) {
 		btnDisplay.setBounds(78, 10, 95, 23);
 		panel_2.add(btnDisplay);
 		}
 		
 		JButton btnReport = new JButton("신고");
 		if(!vo.getNickName().equals(bVO.getNickName()) && !bVO.getCategory().equals("공지사항")) {
-			btnUpdate.setBounds(292, 10, 95, 23);
+			btnReport.setBounds(292, 10, 95, 23);
 			panel_2.add(btnReport);
 		}
 		
@@ -143,9 +140,7 @@ public class BoardRead extends JFrame {
 		
 		txtTitle = new JTextField();
 		txtTitle.setBounds(12, 49, 482, 36);
-		if(!vo.getAdminYN().equals("Y")) {
-			txtTitle.setEditable(false);
-		}
+		txtTitle.setEditable(false);
 		txtTitle.setText(bVO.getTitle());
 		panel_3.add(txtTitle);
 		txtTitle.setColumns(10);
@@ -228,12 +223,21 @@ public class BoardRead extends JFrame {
 		// 나만보기
 		btnDisplay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int ans = JOptionPane.showConfirmDialog(null, "현재 게시글을 나만보기로 변경하시겠습니까?","나만보기",JOptionPane.YES_NO_OPTION);
-				if(ans == 0) {
-					res = dao.setDisplayYN("N",bVO.getIdx(),bVO.getNickName());
-					if(res == 0) JOptionPane.showMessageDialog(null, "알 수 없는 문제로 변경하지 못하였습니다.");
-					else JOptionPane.showMessageDialog(null, "나만보기로 변경하였습니다.");
-					
+				if(bVO.getDisplayYN().equals("Y")) {
+					int ans = JOptionPane.showConfirmDialog(null, "현재 게시글을 나만보기로 변경하시겠습니까?","나만보기",JOptionPane.YES_NO_OPTION);
+					if(ans == 0) {
+						res = dao.setDisplayYN("N",bVO.getIdx(),bVO.getNickName());
+						if(res == 0) JOptionPane.showMessageDialog(null, "알 수 없는 문제로 변경하지 못하였습니다.");
+						else JOptionPane.showMessageDialog(null, "나만보기로 변경하였습니다.");
+					}
+				}
+				else if(bVO.getDisplayYN().equals("N")) {
+					int ans = JOptionPane.showConfirmDialog(null, "현재 게시글을 나만보기 취소로 변경하시겠습니까?","나만보기 취소",JOptionPane.YES_NO_OPTION);
+					if(ans == 0) {
+						res = dao.setDisplayYN("Y",bVO.getIdx(),bVO.getNickName());
+						if(res == 0) JOptionPane.showMessageDialog(null, "알 수 없는 문제로 변경하지 못하였습니다.");
+						else JOptionPane.showMessageDialog(null, "나만보기가 취소되었습니다.");
+					}
 				}
 			}
 		});

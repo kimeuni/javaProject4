@@ -5,10 +5,16 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,20 +34,26 @@ import javax.swing.table.TableColumnModel;
 
 import longinSw.UserSwVO;
 import longinSw.userlog;
+import javax.swing.JRadioButton;
 
 @SuppressWarnings("serial")
 public class MainBoards extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private JScrollPane scrollPaneNot;
-	private DefaultTableModel dtm;
-	private JTable table;
+	private JScrollPane scrollPaneBo, scrollPaneNot;
+	private DefaultTableModel notDtm, boDtm;
+	private JTable notTable, boTable;
+	private JRadioButton rdAll,rdGame, rdWebt, rdDoll, rdEx, rdPassion;
+	private ButtonGroup buttonGroup = new ButtonGroup();
+	private JTextField txtBoardCondi, txtNotCondi;
+	private JComboBox cbBoardCondi, cbNotChoice;
 	
-	private Vector noticesTitle, nData;
+	private Vector noticesTitle, nData, BoardTitle, bData;
 	
 	BoardDAO dao = new BoardDAO();
 	BoardVO bVO = null;
+	int btnCheck;
+	String cbChoiceB, txtCondiB, cbChoiceN, txtCondiN;
 
 	@SuppressWarnings("unchecked")
 	public MainBoards(UserSwVO vo) {
@@ -116,7 +128,7 @@ public class MainBoards extends JFrame {
 		lblBoardImg.setBounds(34, 10, 36, 33);
 		pnHoiwon.add(lblBoardImg);
 		
-		JLabel lblBoard = new JLabel("게시물");
+		JLabel lblBoard = new JLabel("게시판");
 		lblBoard.setHorizontalAlignment(SwingConstants.CENTER);
 		lblBoard.setForeground(Color.WHITE);
 		lblBoard.setFont(new Font("굴림", Font.BOLD, 18));
@@ -206,37 +218,39 @@ public class MainBoards extends JFrame {
 		lblNewLabel_3.setBounds(0, 10, 736, 33);
 		pnW.add(lblNewLabel_3);
 		
+		/*===========================================*/
+		//공지사항
 		JPanel pnNotices = new JPanel();
 		pnNotices.setBounds(310, 84, 712, 517);
 		pabc.add(pnNotices);
 		pnNotices.setLayout(null);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(0, 0, 712, 51);
-		pnNotices.add(panel_1);
-		panel_1.setLayout(null);
+		JPanel pnSeatch = new JPanel();
+		pnSeatch.setBounds(0, 0, 712, 51);
+		pnNotices.add(pnSeatch);
+		pnSeatch.setLayout(null);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setFont(new Font("굴림", Font.PLAIN, 16));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"", "제목", "작성자"}));
-		comboBox.setBounds(12, 10, 81, 33);
-		panel_1.add(comboBox);
+		cbNotChoice = new JComboBox();
+		cbNotChoice.setFont(new Font("굴림", Font.PLAIN, 16));
+		cbNotChoice.setModel(new DefaultComboBoxModel(new String[] {"", "제목", "닉네임"}));
+		cbNotChoice.setBounds(12, 10, 81, 33);
+		pnSeatch.add(cbNotChoice);
 		
-		textField = new JTextField();
-		textField.setFont(new Font("굴림", Font.PLAIN, 16));
-		textField.setBounds(105, 10, 185, 33);
-		panel_1.add(textField);
-		textField.setColumns(10);
+		txtNotCondi = new JTextField();
+		txtNotCondi.setFont(new Font("굴림", Font.PLAIN, 16));
+		txtNotCondi.setBounds(105, 10, 185, 33);
+		pnSeatch.add(txtNotCondi);
+		txtNotCondi.setColumns(10);
 		
-		JButton btnNewButton_1 = new JButton("검색");
-		btnNewButton_1.setFont(new Font("굴림", Font.PLAIN, 16));
-		btnNewButton_1.setBounds(296, 10, 68, 33);
-		panel_1.add(btnNewButton_1);
+		JButton btnNotSeatch = new JButton("검색");
+		btnNotSeatch.setFont(new Font("굴림", Font.PLAIN, 16));
+		btnNotSeatch.setBounds(296, 10, 68, 33);
+		pnSeatch.add(btnNotSeatch);
 		
-		JButton btnNewButton = new JButton("새로고침");
-		btnNewButton.setFont(new Font("굴림", Font.PLAIN, 16));
-		btnNewButton.setBounds(589, 10, 111, 33);
-		panel_1.add(btnNewButton);
+		JButton btnNotRef = new JButton("새로고침");
+		btnNotRef.setFont(new Font("굴림", Font.PLAIN, 16));
+		btnNotRef.setBounds(589, 10, 111, 33);
+		pnSeatch.add(btnNotRef);
 		
 		JPanel pnNoticesBoard = new JPanel();
 		pnNoticesBoard.setBounds(0, 61, 712, 395);
@@ -252,34 +266,148 @@ public class MainBoards extends JFrame {
 		noticesTitle.add("좋아요");
 		noticesTitle.add("조회수");
 		
-		nData = dao.getBoardList("category","공지사항","Y");
+		nData = dao.getNotBoardList("category","공지사항","Y");
 		
-		dtm = new DefaultTableModel(nData, noticesTitle);
+		notDtm = new DefaultTableModel(nData, noticesTitle);
 		
-		table = new JTable(dtm);
+		notTable = new JTable(notDtm);
 		
-		tableCellAlign(table);
+		tableCellAlign(notTable);
 		
-		scrollPaneNot = new JScrollPane(table);
+		scrollPaneNot = new JScrollPane(notTable);
 		scrollPaneNot.setBounds(0, 0, 712, 395);
 		pnNoticesBoard.add(scrollPaneNot);
 		
-		JPanel panel_1_2 = new JPanel();
-		panel_1_2.setBounds(0, 466, 712, 51);
-		pnNotices.add(panel_1_2);
-		panel_1_2.setLayout(null);
+		JPanel pnButton = new JPanel();
+		pnButton.setBounds(0, 466, 712, 51);
+		pnNotices.add(pnButton);
+		pnButton.setLayout(null);
 		
 		JButton btnWrite = new JButton("글쓰기");
 		btnWrite.setBounds(585, 10, 115, 31);
-		panel_1_2.add(btnWrite);
+		pnButton.add(btnWrite);
 		
 		JButton btnRead = new JButton("글보기");
 		btnRead.setBounds(449, 10, 115, 31);
-		panel_1_2.add(btnRead);
+		pnButton.add(btnRead);
+		
+		JButton btnBack = new JButton("나가기");
+		btnBack.setBounds(311, 10, 115, 31);
+		pnButton.add(btnBack);
+		/*========================================================*/
+		// 게시판
+		JPanel pnBoard = new JPanel();
+		pnBoard.setBounds(310, 84, 712, 517);
+		pabc.add(pnBoard);
+		pnBoard.setLayout(null);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(0, 0, 712, 51);
+		pnBoard.add(panel_1);
+		panel_1.setLayout(null);
+		
+		rdAll = new JRadioButton("전체");
+		rdAll.setSelected(true);
+		rdAll.setBounds(41, 6, 61, 39);
+		buttonGroup.add(rdAll);
+		panel_1.add(rdAll);
+		
+		rdGame = new JRadioButton("게임");
+		rdGame.setBounds(143, 6, 61, 39);
+		buttonGroup.add(rdGame);
+		panel_1.add(rdGame);
+		
+		rdWebt = new JRadioButton("웹툰/소설");
+		rdWebt.setBounds(245, 6, 99, 39);
+		buttonGroup.add(rdWebt);
+		panel_1.add(rdWebt);
+		
+		rdDoll = new JRadioButton("인형");
+		rdDoll.setBounds(385, 6, 67, 39);
+		buttonGroup.add(rdDoll);
+		panel_1.add(rdDoll);
+		
+		rdEx = new JRadioButton("운동");
+		rdEx.setBounds(493, 6, 67, 39);
+		buttonGroup.add(rdEx);
+		panel_1.add(rdEx);
+		
+		rdPassion = new JRadioButton("패션");
+		rdPassion.setBounds(601, 6, 67, 39);
+		buttonGroup.add(rdPassion);
+		panel_1.add(rdPassion);
+		
+		JPanel pnBoards = new JPanel();
+		pnBoards.setBounds(0, 53, 712, 355);
+		pnBoard.add(pnBoards);
+		pnBoards.setLayout(null);
+		
+		BoardTitle = new Vector<>();
+		BoardTitle.add("번호");
+		BoardTitle.add("카테고리");
+		BoardTitle.add("제목");
+		BoardTitle.add("작성자");
+		BoardTitle.add("날짜");
+		BoardTitle.add("좋아요");
+		BoardTitle.add("조회수");
+		
+		bData = dao.getBoardList("공지사항","Y");
+		
+		boDtm = new DefaultTableModel(bData, BoardTitle);
+		
+		boTable = new JTable(boDtm);
+		
+		tableCellAlign(boTable);
+		
+		scrollPaneBo = new JScrollPane(boTable);
+		scrollPaneBo.setBounds(0, 0, 712, 355);
+		pnBoards.add(scrollPaneBo);
+		
+		JPanel panel_1_2 = new JPanel();
+		panel_1_2.setBounds(0, 466, 712, 51);
+		pnBoard.add(panel_1_2);
+		panel_1_2.setLayout(null);
+		
+		JButton btnBoardWrite = new JButton("글쓰기");
+		btnBoardWrite.setBounds(585, 10, 115, 31);
+		panel_1_2.add(btnBoardWrite);
+		
+		JButton btnBoardRead = new JButton("글보기");
+		btnBoardRead.setBounds(449, 10, 115, 31);
+		panel_1_2.add(btnBoardRead);
+		
+		JButton btnBoardBack = new JButton("나가기");
+		btnBoardBack.setBounds(311, 10, 115, 31);
+		panel_1_2.add(btnBoardBack);
+		
+		JButton btnBoardRef = new JButton("새로고침");
+		btnBoardRef.setBounds(12, 8, 111, 33);
+		panel_1_2.add(btnBoardRef);
+		btnBoardRef.setFont(new Font("굴림", Font.PLAIN, 16));
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setBounds(0, 412, 712, 49);
+		pnBoard.add(panel_2);
+		panel_2.setLayout(null);
+		
+		cbBoardCondi = new JComboBox();
+		cbBoardCondi.setModel(new DefaultComboBoxModel(new String[] {"", "제목", "닉네임"}));
+		cbBoardCondi.setBounds(158, 10, 102, 29);
+		panel_2.add(cbBoardCondi);
+		
+		txtBoardCondi = new JTextField();
+		txtBoardCondi.setBounds(272, 10, 177, 29);
+		panel_2.add(txtBoardCondi);
+		txtBoardCondi.setColumns(10);
+		
+		JButton btnBoardSearch = new JButton("검색");
+		btnBoardSearch.setBounds(461, 11, 87, 26);
+		panel_2.add(btnBoardSearch);
+		
 		
 		
 		pnNotices.setVisible(false);
-		
+		pnBoard.setVisible(false);
 		/*===========================================================*/
 		/*  메인메뉴 관리  */
 		//공지사항
@@ -287,9 +415,19 @@ public class MainBoards extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				pnNotices.setVisible(true);
+				pnBoard.setVisible(false);
 			}
 		});
 		
+		// 게시판
+		pnHoiwon.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				pnNotices.setVisible(false);
+				pnBoard.setVisible(true);
+				
+			}
+		});
 		
 		// 메인메뉴 게시판 나가기
 		pnBack.addMouseListener(new MouseAdapter() {
@@ -325,7 +463,7 @@ public class MainBoards extends JFrame {
 		// 공지사항 글쓰기 처리
 		btnWrite.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(vo.getId().equals("admin")) {
+				if(vo.getAdminYN().equals("Y")) {
 					new setUpdateNotices(vo);
 				}
 				else {
@@ -338,28 +476,184 @@ public class MainBoards extends JFrame {
 		// 공지사항 글보기를 눌렀을 시 조회수 올라가기
 		btnRead.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int row = table.getSelectedRow();
+				int row = notTable.getSelectedRow();
+				int col = notTable.getSelectedColumn();
 				
-				int idx = (int)table.getValueAt(row, 0);
-				String category = table.getValueAt(row, 1).toString();
-				String title = table.getValueAt(row, 2).toString();
-				String nickName = table.getValueAt(row, 3).toString();
-				int ViewCnt = (int)table.getValueAt(row, 6);
-				
-				dao.getViewCnt(idx,category,title,nickName,ViewCnt); // 글보기 클릭시 조회수 +1
-				bVO = dao.getReadBoard(idx,category,title,nickName);
-				
-				new BoardRead(vo, bVO);
+				if(row == -1 || col == -1) {
+					JOptionPane.showMessageDialog(null, "게시글을 선택해주세요.");
+				}
+				else {
+					int idx = (int)notTable.getValueAt(row, 0);
+					String category = notTable.getValueAt(row, 1).toString();
+					String title = notTable.getValueAt(row, 2).toString();
+					String nickName = notTable.getValueAt(row, 3).toString();
+					int ViewCnt = (int)notTable.getValueAt(row, 6);
+					
+					dao.getViewCnt(idx,category,title,nickName,ViewCnt); // 글보기 클릭시 조회수 +1
+					bVO = dao.getReadBoard(idx,category,title,nickName);
+					
+					new BoardRead(vo, bVO);
+				}
 			}
 		});
 		
+		// 나가기
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pnNotices.setVisible(false);
+				allNoticesList();
+			}
+		});
 		
 		// 새로고침
-		btnNewButton.addActionListener(new ActionListener() {
+		btnNotRef.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				nData = dao.getBoardList("category","공지사항","Y");
-				dtm.setDataVector(nData, noticesTitle);
-				tableCellAlign(table);
+				allNoticesList();
+			}
+		});
+		
+		// 조건항목 검색버튼
+		btnNotSeatch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getNoticesBoardCondi();
+			}
+		});
+		
+		txtNotCondi.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) getNoticesBoardCondi();
+			}
+		});
+		
+		/*===========================================================*/
+		/*  게시판  */
+		// 게시판 전체
+		rdAll.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnBoardRef.doClick();
+				btnCheck = 0;
+			}
+		});
+		
+		// 게시판 게임
+		rdGame.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				bData = dao.getBoardCategoryList("게임","Y");
+				boDtm.setDataVector(bData, BoardTitle);
+				tableCellAlign(boTable);
+				btnCheck = 1;
+			}
+		});
+		
+		// 게시판 웹툰/소설
+		rdWebt.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				bData = dao.getBoardCategoryList("웹툰/소설","Y");
+				boDtm.setDataVector(bData, BoardTitle);
+				tableCellAlign(boTable);
+				btnCheck = 2;
+			}
+		});
+		
+		// 게시판 인형
+		rdDoll.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				bData = dao.getBoardCategoryList("인형","Y");
+				boDtm.setDataVector(bData, BoardTitle);
+				tableCellAlign(boTable);
+				btnCheck = 3;
+			}
+		});
+		
+		// 게시판 운동
+		rdEx.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				bData = dao.getBoardCategoryList("운동","Y");
+				boDtm.setDataVector(bData, BoardTitle);
+				tableCellAlign(boTable);
+				btnCheck = 4;
+			}
+		});
+		
+		// 게시판 패션
+		rdPassion.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				bData = dao.getBoardCategoryList("패션","Y");
+				boDtm.setDataVector(bData, BoardTitle);
+				tableCellAlign(boTable);
+				btnCheck = 5;
+			}
+		});
+		
+		// 글쓰기
+		btnBoardWrite.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new setUpdateBoard(vo);
+			}
+		});
+		
+		// 게시판 글보기
+		// 게시판 글보기를 눌렀을 시 조회수 올라가기
+		btnBoardRead.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row = boTable.getSelectedRow();
+				int col = boTable.getSelectedColumn();
+				
+				if(row == -1 || col == -1) {
+					JOptionPane.showMessageDialog(null, "게시글을 선택해주세요.");
+				}
+				else {
+					int idx = (int)boTable.getValueAt(row, 0);
+					String category = boTable.getValueAt(row, 1).toString();
+					String title = boTable.getValueAt(row, 2).toString();
+					String nickName = boTable.getValueAt(row, 3).toString();
+					int ViewCnt = (int)boTable.getValueAt(row, 6);
+					
+					dao.getViewCnt(idx,category,title,nickName,ViewCnt); // 글보기 클릭시 조회수 +1
+					bVO = dao.getReadBoard(idx,category,title,nickName);
+					
+					new BoardRead(vo, bVO);
+				}
+			}
+		});
+		
+		// 나가기
+		btnBoardBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pnBoard.setVisible(false);
+				rdAll.doClick();
+			}
+		});
+		
+		//새로고침
+		btnBoardRef.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				bData = dao.getBoardList("공지사항","Y");
+				boDtm.setDataVector(bData, BoardTitle);
+				tableCellAlign(boTable);
+				rdAll.setSelected(true);
+			}
+		});
+		
+		// 게시판 조건항목 검색버튼
+		btnBoardSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getBoardCondi();
+			}
+		});
+		
+		// 게시판 조건항목 키보드
+		txtBoardCondi.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) getBoardCondi();
 			}
 		});
 	}
@@ -376,5 +670,84 @@ public class MainBoards extends JFrame {
 		for(int i=0; i<tcm.getColumnCount(); i++) {
 			tcm.getColumn(i).setCellRenderer(dtcr);	
 		}
+	}
+	// 공지사항 전체리스트
+	private void allNoticesList() {
+		nData = dao.getNotBoardList("category","공지사항","Y");
+		notDtm.setDataVector(nData, noticesTitle);
+		tableCellAlign(notTable);
+	}
+	
+	// 게시판 조건검색 항목 선택 후 입력필드 작성하면 수행될 내용
+	private void getBoardCondi() {
+		cbChoiceB = cbBoardCondi.getSelectedItem().toString();
+		txtCondiB = txtBoardCondi.getText();
+		
+		if(cbChoiceB.trim().equals("")) {
+			JOptionPane.showMessageDialog(null, "검색할 항목을 선택해주세요.");
+			return;
+		}
+		else if(txtCondiB.trim().equals("")) {
+			JOptionPane.showMessageDialog(null, "검색할 내용을 입력해주세요.");
+			return;
+		}
+		
+		switch (btnCheck) {
+			case 1:
+				if(cbChoiceB.equals("제목")) bData = dao.getBoardCondiSeatch("title", txtCondiB, "게임","Y");
+				else if(cbChoiceB.equals("닉네임")) bData = dao.getBoardCondiSeatch("nickName", txtCondiB, "게임","Y");
+				boDtm.setDataVector(bData, BoardTitle);
+				tableCellAlign(boTable);
+				break;
+			case 2:
+				if(cbChoiceB.equals("제목")) bData = dao.getBoardCondiSeatch("title", txtCondiB, "웹툰/소설","Y");
+				else if(cbChoiceB.equals("닉네임")) bData = dao.getBoardCondiSeatch("nickName", txtCondiB, "웹툰/소설","Y");
+				boDtm.setDataVector(bData, BoardTitle);
+				tableCellAlign(boTable);
+				break;
+			case 3:
+				if(cbChoiceB.equals("제목")) bData = dao.getBoardCondiSeatch("title", txtCondiB, "인형","Y");
+				else if(cbChoiceB.equals("닉네임")) bData = dao.getBoardCondiSeatch("nickName", txtCondiB, "인형","Y");
+				boDtm.setDataVector(bData, BoardTitle);
+				tableCellAlign(boTable);
+				break;
+			case 4:
+				if(cbChoiceB.equals("제목")) bData = dao.getBoardCondiSeatch("title", txtCondiB, "운동","Y");
+				else if(cbChoiceB.equals("닉네임")) bData = dao.getBoardCondiSeatch("nickName", txtCondiB, "운동","Y");
+				boDtm.setDataVector(bData, BoardTitle);
+				tableCellAlign(boTable);
+				break;
+			case 5:
+				if(cbChoiceB.equals("제목")) bData = dao.getBoardCondiSeatch("title", txtCondiB, "패션","Y");
+				else if(cbChoiceB.equals("닉네임")) bData = dao.getBoardCondiSeatch("nickName", txtCondiB, "패션","Y");
+				boDtm.setDataVector(bData, BoardTitle);
+				tableCellAlign(boTable);
+				break;
+			default:
+				if(cbChoiceB.equals("제목")) bData = dao.getBoardCondiallSeatch("title", txtCondiB,"공지사항", "Y");
+				else if(cbChoiceB.equals("닉네임")) bData = dao.getBoardCondiallSeatch("nickName", txtCondiB, "공지사항", "Y");
+				boDtm.setDataVector(bData, BoardTitle);
+				tableCellAlign(boTable);
+				break;
+		}
+	}
+	
+	// 공지사항 조건검색 항목 선택 후 입력필드 작성하면 수행될 내용
+	private void getNoticesBoardCondi() {
+		cbChoiceN = cbNotChoice.getSelectedItem().toString();
+		txtCondiN = txtNotCondi.getText();
+		
+		if(cbChoiceN.trim().equals("")) {
+			JOptionPane.showMessageDialog(null, "검색할 항목을 선택해주세요.");
+			return;
+		}
+		else if(txtCondiN.trim().equals("")) {
+			JOptionPane.showMessageDialog(null, "검색할 내용을 입력해주세요.");
+			return;
+		}
+		if(cbChoiceN.equals("제목")) nData = dao.getNotBoardCondiSeatch("title", txtCondiN ,"공지사항", "Y");
+		else if(cbChoiceN.equals("닉네임")) nData = dao.getNotBoardCondiSeatch("nickName", txtCondiN ,"공지사항", "Y");
+		notDtm.setDataVector(nData, noticesTitle);
+		tableCellAlign(notTable);
 	}
 }

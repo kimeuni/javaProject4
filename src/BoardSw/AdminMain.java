@@ -41,15 +41,15 @@ public class AdminMain extends JFrame {
 	private JTextField txtHoiwonSearch;
 	private JTable uTable, rTable;
 	private JComboBox cbHoiwonSearch;
+	private Vector hoiwonTitle,userData,reportTitle,reportData;
+	private DefaultTableModel uDtm, bDtm;
+	private JTextField txtReportCondi;
+	private JComboBox cbReportSearch;
 	
-	Vector hoiwonTitle,userData,reportTitle,reportData;
-	DefaultTableModel dtm;
 	UserSwDAO uDAO = new UserSwDAO();
 	BoardDAO bDAO = new BoardDAO();
 	BoardVO bVO = null;
-	
 	int res = 0;
-	private JTextField txtReportCondi;
 
 	@SuppressWarnings("unchecked")
 	public AdminMain(UserSwVO vo) {
@@ -262,9 +262,9 @@ public class AdminMain extends JFrame {
 		
 		userData = uDAO.getUserTableList();
 		
-		dtm = new DefaultTableModel(userData, hoiwonTitle);
+		uDtm = new DefaultTableModel(userData, hoiwonTitle);
 		
-		uTable = new JTable(dtm);
+		uTable = new JTable(uDtm);
 		
 		spHoiwon.setViewportView(uTable);
 		
@@ -299,9 +299,9 @@ public class AdminMain extends JFrame {
 		pnHoiwonReport.add(panel_2);
 		panel_2.setLayout(null);
 		
-		JComboBox cbReportSearch = new JComboBox();
+		cbReportSearch = new JComboBox();
 		cbReportSearch.setFont(new Font("굴림", Font.PLAIN, 16));
-		cbReportSearch.setModel(new DefaultComboBoxModel(new String[] {"", "닉네임", "제목", "내용"}));
+		cbReportSearch.setModel(new DefaultComboBoxModel(new String[] {"", "제목", "닉네임"}));
 		cbReportSearch.setBounds(12, 10, 81, 33);
 		panel_2.add(cbReportSearch);
 		
@@ -340,9 +340,9 @@ public class AdminMain extends JFrame {
 		
 		reportData = bDAO.getReportTableList("공지사항","Y","Y");
 		
-		dtm = new DefaultTableModel(reportData, reportTitle);
+		bDtm = new DefaultTableModel(reportData, reportTitle);
 		
-		rTable = new JTable(dtm);
+		rTable = new JTable(bDtm);
 		
 		spReport.setViewportView(rTable);
 		
@@ -358,12 +358,16 @@ public class AdminMain extends JFrame {
 		panel_1_3.add(btnReportDelete);
 		
 		JButton btnReportDate = new JButton("상세정보");
-		btnReportDate.setBounds(458, 10, 115, 31);
+		btnReportDate.setBounds(331, 10, 115, 31);
 		panel_1_3.add(btnReportDate);
 		
 		JButton btnReportBack = new JButton("나가기");
-		btnReportBack.setBounds(331, 10, 115, 31);
+		btnReportBack.setBounds(204, 10, 115, 31);
 		panel_1_3.add(btnReportBack);
+		
+		JButton btnReportN = new JButton("문제없음");
+		btnReportN.setBounds(458, 10, 115, 31);
+		panel_1_3.add(btnReportN);
 		
 		
 		
@@ -432,15 +436,19 @@ public class AdminMain extends JFrame {
 		btnHoiwonDate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row = uTable.getSelectedRow();
+				int col = uTable.getSelectedColumn();
 				
-				String id = uTable.getValueAt(row, 1).toString();
-				
-				UserSwVO uVO = new UserSwVO();
-				uVO = uDAO.getIdSearch(id);
-				
-				new HoiwonData(uVO);
-				
-				
+				if(row == -1 || col == -1) {
+					JOptionPane.showMessageDialog(null, "회원을 선택해주세요.");
+				}
+				else {
+					String id = uTable.getValueAt(row, 1).toString();
+					
+					UserSwVO uVO = new UserSwVO();
+					uVO = uDAO.getIdSearch(id);
+					
+					new HoiwonData(uVO);
+				}
 			}
 		});
 		
@@ -503,20 +511,53 @@ public class AdminMain extends JFrame {
 			}
 		});
 		
+		// 문제없음
+		btnReportN.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row = rTable.getSelectedRow();
+				int col = rTable.getSelectedColumn();
+				
+				if(row == -1 || col == -1) {
+					JOptionPane.showMessageDialog(null, "게시글을 선택해주세요.");
+				}
+				else {
+					int idx = (int)rTable.getValueAt(row, 0);
+					String nickName = rTable.getValueAt(row, 3).toString();
+					
+					int ans = JOptionPane.showConfirmDialog(null, "신고된 게시글에 문제가 없습니까?", "문제없음",JOptionPane.YES_NO_OPTION);
+					if(ans == 0) {
+						res = bDAO.setReportYN("N",idx,nickName);
+						if(res == 0) JOptionPane.showMessageDialog(null, "알 수 없는 문제로 처리하지 못하였습니다.");
+						else {
+							JOptionPane.showMessageDialog(null, "신고가 취소되었습니다.");
+							allReportList();
+						}
+					}
+				}
+			}
+		});
+		
 		// 상세정보
 		btnReportDate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row = rTable.getSelectedRow();
+				int col = rTable.getSelectedColumn();
 				
-				int idx = (int)rTable.getValueAt(row, 0);
-				String category = rTable.getValueAt(row, 1).toString();
-				String title = rTable.getValueAt(row, 2).toString();
-				String nickName = rTable.getValueAt(row, 3).toString();
-				int ViewCnt = (int)rTable.getValueAt(row, 6);
+				if(row == -1 || col == -1) {
+					JOptionPane.showMessageDialog(null, "게시글을 선택해주세요.");
+				}
+				else {
+					int idx = (int)rTable.getValueAt(row, 0);
+					String category = rTable.getValueAt(row, 1).toString();
+					String title = rTable.getValueAt(row, 2).toString();
+					String nickName = rTable.getValueAt(row, 3).toString();
+					int ViewCnt = (int)rTable.getValueAt(row, 6);
+					
+					bVO = bDAO.getReadBoard(idx,category,title,nickName);
+					
+					new BoardRead(vo, bVO);
+				}
 				
-				bVO = bDAO.getReadBoard(idx,category,title,nickName);
-				
-				new BoardRead(vo, bVO);
 			}
 		});
 		
@@ -540,6 +581,22 @@ public class AdminMain extends JFrame {
 				}
 			}
 		});
+		
+		// 조건항목 검색버튼
+		btnNewButton_2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getReportSeatchProcess();
+			}
+		});
+		
+		// 조건항목 검색 키보드
+		txtReportCondi.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) getReportSeatchProcess();
+			}
+		});
 	}
 	
 	/* ==================================================================== */
@@ -559,14 +616,14 @@ public class AdminMain extends JFrame {
 	// 전체 신고 리스트 출력
 	private void allReportList() {
 		reportData = bDAO.getReportTableList("공지사항","Y","Y");
-		dtm.setDataVector(reportData, reportTitle);
+		bDtm.setDataVector(reportData, reportTitle);
 		tableCellAlign(rTable);
 	}
 	
 	// 전체 유저 리스트 호출
 	private void allUserList() {
 		userData = uDAO.getUserTableList();
-		dtm.setDataVector(userData, hoiwonTitle);
+		uDtm.setDataVector(userData, hoiwonTitle);
 		tableCellAlign(uTable);
 	}
 	
@@ -577,6 +634,10 @@ public class AdminMain extends JFrame {
 		
 		if(cbChoice.trim().equals("")) {
 			JOptionPane.showMessageDialog(null, "검색할 항목을 선택해주세요.");
+			return;
+		}
+		else if(txtSearchs.trim().equals("")) {
+			JOptionPane.showMessageDialog(null, "검색할 내용을 입력해주세요.");
 			return;
 		}
 		if(cbChoice.equals("성명")) userData = uDAO.getHoiwonSearch("name",txtSearchs);
@@ -591,7 +652,26 @@ public class AdminMain extends JFrame {
 		else if(cbChoice.equals("닉네임")) userData = uDAO.getHoiwonSearch("nickName",txtSearchs);
 		else if(cbChoice.equals("아이디")) userData = uDAO.getHoiwonSearch("id",txtSearchs);
 		
-		dtm.setDataVector(userData, hoiwonTitle);
+		uDtm.setDataVector(userData, hoiwonTitle);
 		tableCellAlign(uTable);
+	}
+	
+	// 신고관리 조건항목 검색 프로세스
+	private void getReportSeatchProcess() {
+		String cbChoice = cbReportSearch.getSelectedItem().toString();
+		String txtSearchs = txtReportCondi.getText();
+		
+		if(cbChoice.trim().equals("")) {
+			JOptionPane.showMessageDialog(null, "검색할 항목을 선택해주세요.");
+			return;
+		}
+		else if(txtSearchs.trim().equals("")) {
+			JOptionPane.showMessageDialog(null, "검색할 내용을 입력해주세요.");
+			return;
+		}
+		if(cbChoice.equals("제목")) reportData = bDAO.getReportCondiSeatch("title", txtSearchs,"Y");
+		else if(cbChoice.equals("닉네임")) reportData = bDAO.getReportCondiSeatch("nickName", txtSearchs, "Y");
+		bDtm.setDataVector(reportData, reportTitle);
+		tableCellAlign(rTable);
 	}
 }

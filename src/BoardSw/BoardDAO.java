@@ -3,6 +3,7 @@ package BoardSw;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import longinSw.ConnDAO;
@@ -38,6 +39,7 @@ public class BoardDAO extends ConnDAO {
 		pstmtClose();
 	}
 
+	// 입력한 게시글 데이터베이스에 저장(모든 게시글)
 	public int setNoticesUpdate(BoardVO bVO) {
 		int res = 0;
 		try {
@@ -62,7 +64,7 @@ public class BoardDAO extends ConnDAO {
 	// 선택한 카테고리명 변수(conditions) 작성한 카테고리 변수(condiStr) 리스트에 띄울 것인가 (display)
 	// 게시판 리스트 출력
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Vector getBoardList(String conditions, String condiStr, String display) {
+	public Vector getNotBoardList(String conditions, String condiStr, String display) {
 		Vector uData = new Vector();
 		try {
 			sql = "select * from boardSw where " + conditions + " = ? and displayYN = ? order by idx desc";
@@ -259,7 +261,7 @@ public class BoardDAO extends ConnDAO {
 		return res;
 	}
 
-	// 게시글 신고
+	// 게시글 신고 Yes or No
 	public int setReportYN(String report, int idx, String nickName) {
 		int res = 0;
 		try {
@@ -276,5 +278,264 @@ public class BoardDAO extends ConnDAO {
 			pstmtClose();
 		}
 		return res;
+	}
+
+	// 나의 모든 게시판 리스트 출력
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Vector getMyAllBoardList(String category, String nickName) {
+		Vector mData = new Vector();
+		try {
+			sql = "select * from boardSw where category != ? and nickName =? order by idx desc";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, category);
+			pstmt.setString(2, nickName);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Vector vo = new Vector();
+				vo.add(rs.getInt("idx"));
+				vo.add(rs.getString("category"));
+				vo.add(rs.getString("title"));
+				vo.add(rs.getString("nickName"));
+				vo.add(rs.getString("writedate").substring(0,10));
+				vo.add(rs.getInt("likes"));
+				vo.add(rs.getInt("viewCnt"));
+				mData.add(vo);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 " + e.getMessage());
+		} finally {
+			rsClose();
+		}
+		
+		return mData;
+	}
+
+	// 나만보기한 게시글 보기
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Vector getMyDisNoList(String category, String nickName, String display) {
+		Vector nData = new Vector();
+		try {
+			sql = "select * from boardSw where category != ? and nickName =? and displayYN = ? order by idx desc";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, category);
+			pstmt.setString(2, nickName);
+			pstmt.setString(3, display);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Vector vo = new Vector();
+				vo.add(rs.getInt("idx"));
+				vo.add(rs.getString("category"));
+				vo.add(rs.getString("title"));
+				vo.add(rs.getString("nickName"));
+				vo.add(rs.getString("writedate").substring(0,10));
+				vo.add(rs.getInt("likes"));
+				vo.add(rs.getInt("viewCnt"));
+				nData.add(vo);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 " + e.getMessage());
+		} finally {
+			rsClose();
+		}
+		
+		return nData;
+	}
+
+	// 일반 게시판 리스트 모두 출력하기 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Vector getBoardList(String category, String displayYN) {
+		Vector bData = new Vector();
+		try {
+			sql = "select * from boardSw where category != ? and displayYN = ? order by idx desc";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, category);
+			pstmt.setString(2, displayYN);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Vector vo = new Vector();
+				vo.add(rs.getInt("idx"));
+				vo.add(rs.getString("category"));
+				vo.add(rs.getString("title"));
+				vo.add(rs.getString("nickName"));
+				vo.add(rs.getString("writedate").substring(0,10));
+				vo.add(rs.getInt("likes"));
+				vo.add(rs.getInt("viewCnt"));
+				bData.add(vo);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 " + e.getMessage());
+		} finally {
+			rsClose();
+		}
+		
+		return bData;
+	}
+
+	// 카테고리별 게시판 리스트 출력
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Vector getBoardCategoryList(String category, String displayYN) {
+		Vector bData = new Vector();
+		try {
+			sql = "select * from boardSw where category = ? and displayYN = ? order by idx desc";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, category);
+			pstmt.setString(2, displayYN);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Vector vo = new Vector();
+				vo.add(rs.getInt("idx"));
+				vo.add(rs.getString("category"));
+				vo.add(rs.getString("title"));
+				vo.add(rs.getString("nickName"));
+				vo.add(rs.getString("writedate").substring(0,10));
+				vo.add(rs.getInt("likes"));
+				vo.add(rs.getInt("viewCnt"));
+				bData.add(vo);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 " + e.getMessage());
+		} finally {
+			rsClose();
+		}
+		
+		return bData;
+	}
+
+	// 게시판 카테고리별 찾아서 조건검색 리스트 출력
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Vector getBoardCondiSeatch(String cbBoardChoice, String txtCondiB, String category, String displayYN) {
+		Vector bData = new Vector();
+		try {
+			sql = "select * from boardSw where " + cbBoardChoice + " like ? and category = ? and displayYN = ? order by idx desc";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%" + txtCondiB + "%");
+			pstmt.setString(2, category);
+			pstmt.setString(3, displayYN);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Vector vo = new Vector();
+				vo.add(rs.getInt("idx"));
+				vo.add(rs.getString("category"));
+				vo.add(rs.getString("title"));
+				vo.add(rs.getString("nickName"));
+				vo.add(rs.getString("writedate").substring(0,10));
+				vo.add(rs.getInt("likes"));
+				vo.add(rs.getInt("viewCnt"));
+				bData.add(vo);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 " + e.getMessage());
+		} finally {
+			rsClose();
+		}
+		
+		return bData;
+	}
+
+	// 전체 게시판 조건검색 리스트 출력
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Vector getBoardCondiallSeatch(String cbBoardChoice, String txtCondiB, String category, String displayYN) {
+		Vector bData = new Vector();
+		try {
+			sql = "select * from boardSw where " + cbBoardChoice + " like ? and displayYN = ? and category != ? order by idx desc";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%" + txtCondiB + "%");
+			pstmt.setString(2, displayYN);
+			pstmt.setString(3, category);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Vector vo = new Vector();
+				vo.add(rs.getInt("idx"));
+				vo.add(rs.getString("category"));
+				vo.add(rs.getString("title"));
+				vo.add(rs.getString("nickName"));
+				vo.add(rs.getString("writedate").substring(0,10));
+				vo.add(rs.getInt("likes"));
+				vo.add(rs.getInt("viewCnt"));
+				bData.add(vo);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 " + e.getMessage());
+		} finally {
+			rsClose();
+		}
+		
+		return bData;
+	}
+
+	// 공지사항 조건사항 리스트 출력
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Vector getNotBoardCondiSeatch(String cbNotChoice, String txtCondiN, String category, String displayYN) {
+		Vector nData = new Vector();
+		try {
+			sql = "select * from boardSw where " + cbNotChoice + " like ? and displayYN = ? and category = ? order by idx desc";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%" + txtCondiN + "%");
+			pstmt.setString(2, displayYN);
+			pstmt.setString(3, category);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Vector vo = new Vector();
+				vo.add(rs.getInt("idx"));
+				vo.add(rs.getString("category"));
+				vo.add(rs.getString("title"));
+				vo.add(rs.getString("nickName"));
+				vo.add(rs.getString("writedate").substring(0,10));
+				vo.add(rs.getInt("likes"));
+				vo.add(rs.getInt("viewCnt"));
+				nData.add(vo);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 " + e.getMessage());
+		} finally {
+			rsClose();
+		}
+		return nData;
+	}
+
+	// 신고된 게시판 조건항목 검색 리스트 출력
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Vector getReportCondiSeatch(String cbChoice, String txtSearchs, String reportYN) {
+		Vector bData = new Vector();
+		try {
+			sql = "select * from boardSw where " + cbChoice + " like ? and reportYN = ? order by idx desc";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%" + txtSearchs + "%");
+			pstmt.setString(2, reportYN);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Vector vo = new Vector();
+				vo.add(rs.getInt("idx"));
+				vo.add(rs.getString("category"));
+				vo.add(rs.getString("title"));
+				vo.add(rs.getString("nickName"));
+				vo.add(rs.getString("writedate").substring(0,10));
+				vo.add(rs.getInt("likes"));
+				vo.add(rs.getInt("viewCnt"));
+				bData.add(vo);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 " + e.getMessage());
+		} finally {
+			rsClose();
+		}
+		
+		return bData;
 	}
 }

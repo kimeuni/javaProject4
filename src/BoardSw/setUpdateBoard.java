@@ -1,36 +1,42 @@
 package BoardSw;
 
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.EventQueue;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import longinSw.UserSwVO;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
-public class BoardModi extends JFrame {
+import java.awt.Font;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.ActionEvent;
+
+public class setUpdateBoard extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtTitle;
 	private JTextField txtFileName;
+	private JComboBox cbcategory;
 	private JTextArea txtaContent;
 	private ImageFileUpdate imageFileUpdate;
-
+	
 	BoardDAO dao = new BoardDAO();
-	BoardVO VO = null;
+	BoardVO bVO = null;
 	int res = 0;
 	
-	public BoardModi(UserSwVO vo, BoardVO bVO) {
-		super("게시글 수정");
+	public setUpdateBoard(UserSwVO vo) {
+		super("게시판 글쓰기");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500, 670);
 		setLocationRelativeTo(null);
@@ -53,7 +59,7 @@ public class BoardModi extends JFrame {
 		panel.add(panel_1);
 		panel_1.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("게시글 수정");
+		JLabel lblNewLabel = new JLabel("글쓰기");
 		lblNewLabel.setFont(new Font("굴림", Font.PLAIN, 16));
 		lblNewLabel.setBounds(0, 0, 120, 31);
 		panel_1.add(lblNewLabel);
@@ -63,17 +69,15 @@ public class BoardModi extends JFrame {
 		panel.add(panel_2);
 		panel_2.setLayout(null);
 		
+		cbcategory = new JComboBox();
+		cbcategory.setModel(new DefaultComboBoxModel(new String[] {"", "게임","웹툰/소설","인형","운동","패션"}));
+		cbcategory.setBounds(12, 10, 75, 29);
+		panel_2.add(cbcategory);
+		
 		txtTitle = new JTextField();
 		txtTitle.setBounds(99, 10, 373, 29);
 		panel_2.add(txtTitle);
-		txtTitle.setText(bVO.getTitle());
 		txtTitle.setColumns(10);
-		
-		JLabel lblCategory = new JLabel("");
-		lblCategory.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCategory.setBounds(12, 10, 82, 29);
-		lblCategory.setText(bVO.getCategory());
-		panel_2.add(lblCategory);
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBounds(10, 88, 462, 464);
@@ -85,7 +89,6 @@ public class BoardModi extends JFrame {
 		panel_3.add(scrollPane);
 		
 		txtaContent = new JTextArea();
-		txtaContent.setText(bVO.getContent());
 		scrollPane.setViewportView(txtaContent);
 		
 		JPanel pnButton = new JPanel();
@@ -93,7 +96,7 @@ public class BoardModi extends JFrame {
 		panel.add(pnButton);
 		pnButton.setLayout(null);
 		
-		JButton btnFinish = new JButton("수정완료");
+		JButton btnFinish = new JButton("작성완료");
 		btnFinish.setBounds(375, 10, 97, 23);
 		pnButton.add(btnFinish);
 		
@@ -109,7 +112,6 @@ public class BoardModi extends JFrame {
 		txtFileName = new JTextField();
 		txtFileName.setBounds(22, 0, 286, 31);
 		pnFile.add(txtFileName);
-		txtFileName.setText(bVO.getImage());
 		txtFileName.setColumns(10);
 		
 		JButton btnFileUpdate = new JButton("파일 업로드");
@@ -129,35 +131,32 @@ public class BoardModi extends JFrame {
 			}
 		});
 		
-		// 수정완료 버튼
+		// 작성완료 버튼
 		btnFinish.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String category = lblCategory.getText();
-				String title = txtTitle.getText();
-				String content = txtaContent.getText();
-				String image = txtFileName.getText();
+				String boardChoice = cbcategory.getSelectedItem().toString();
+				String boardTitle = txtTitle.getText();
+				String boardContent = txtaContent.getText();
+				String boardImage = txtFileName.getText();
 				
-				if(title.trim().equals("")) {
-					JOptionPane.showMessageDialog(null, "수정하실 제목을 적어주세요.");
-					txtTitle.setText(bVO.getTitle());
-					txtTitle.requestFocus();
-				}
-				else if(content.trim().equals("")) {
-					JOptionPane.showMessageDialog(null, "수정하실 본문을 적어주세요.");
-					txtTitle.setText(bVO.getContent());
-					txtaContent.requestFocus();
-				}
+				if(boardChoice.trim().equals("")) JOptionPane.showMessageDialog(null, "카테고리를 선택해주세요.");
+				else if(boardTitle.trim().equals("")) JOptionPane.showMessageDialog(null, "제목을 작성해주세요.");
+				else if(boardContent.trim().equals("")) JOptionPane.showMessageDialog(null, "본문을 작성해주세요.");
 				else {
-					int ans = JOptionPane.showConfirmDialog(null, "수정하시겠습니까?", "게시글 수정 확인창",JOptionPane.YES_NO_OPTION);
+					bVO = new BoardVO();
+					bVO.setCategory(boardChoice);
+					bVO.setTitle(boardTitle);
+					bVO.setContent(boardContent);
+					bVO.setNickName(vo.getNickName());
+					bVO.setImage(boardImage);
+					
+					int ans = JOptionPane.showConfirmDialog(null, "작성한 글을 올리시겠습니까?", "작성완료 확인창",JOptionPane.YES_NO_OPTION);
 					if(ans == 0) {
-						res = dao.setBoardModi(bVO.getIdx(),bVO.getNickName(),title,content,image);
-						if(res == 0) JOptionPane.showMessageDialog(null, "알 수 없는 오류가 발생하여 글을 수정하는 것에 실패했습니다.");
+						res = dao.setNoticesUpdate(bVO);
+						if(res == 0) JOptionPane.showMessageDialog(null, "알 수 없는 오류가 발생하여 글을 올리는 것에 실패했습니다.");
 						else {
-							JOptionPane.showMessageDialog(null, "게시글을 수정하였습니다.");
-							BoardVO bbVO = new BoardVO();
-							bbVO = dao.getReadBoard(bVO.getIdx(), category, title, bVO.getNickName());
+							JOptionPane.showMessageDialog(null, "작성한 글을 게시하였습니다.");
 							dispose();
-							new BoardRead(vo, bbVO);
 						}
 					}
 				}
@@ -168,7 +167,6 @@ public class BoardModi extends JFrame {
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				new BoardRead(vo, bVO);
 			}
 		});
 	}

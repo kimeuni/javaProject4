@@ -197,11 +197,11 @@ public class UserInput extends JFrame {
 				
 				// 유효성 검사
 				if(!Pattern.matches("^[a-z0-9]{5,20}$", id)) {
-					JOptionPane.showMessageDialog(null, "5~20자 사이, 영문소문자와 숫자로만 입력 가능합니다.");
+					JOptionPane.showMessageDialog(null, "아이디는 5~20자 사이, 영문소문자와 숫자로만 입력 가능합니다.");
 					txtId.requestFocus();
 				}
 				else if(!Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$", pw)) {
-					JOptionPane.showMessageDialog(null, "8~20자 사이, 소문자,대문자,숫자,특수문자를 1개 이상 입력해야 합니다.");
+					JOptionPane.showMessageDialog(null, "비밀번호는 8~20자 사이, 소문자,대문자,숫자,특수문자를 1개 이상 입력해야 합니다.");
 					txtPw.requestFocus();
 				}
 				else if(!Pattern.matches("^[a-zA-Z0-9]{3,20}+@[a-z]{2,10}+\\.[a-z]+$", email)) {
