@@ -167,10 +167,6 @@ public class BoardRead extends JFrame {
 		lblNicknameV.setText(bVO.getNickName());
 		panel_3.add(lblNicknameV);
 		
-		
-		System.out.println("vo" + vo);
-		System.out.println("bVO" + bVO);
-		
 		/* =========================================================== */
 		
 		// 추천버튼
@@ -197,7 +193,6 @@ public class BoardRead extends JFrame {
 					else {
 						JOptionPane.showMessageDialog(null, "삭제되었습니다.");
 						dispose();
-						new MainBoards(vo);
 					}
 				}
 			}

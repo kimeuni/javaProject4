@@ -470,19 +470,24 @@ public class AdminMain extends JFrame {
 		btnHoiwonDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row = uTable.getSelectedRow();
+				int col = uTable.getSelectedColumn();
 				
-				String id = uTable.getValueAt(row, 1).toString();
-				
-				int ans = JOptionPane.showConfirmDialog(null, id + " 님의 계정을 삭제하시겠습니까?", "회원 삭제창", JOptionPane.YES_NO_OPTION);
-				if(ans == 0) {
-					res = uDAO.getDeleteHoiwon(id);
-					if(res == 0) {
-						JOptionPane.showMessageDialog(null, "알 수 없는 오류로 삭제에 실패하였습니다.");
-					}
-					else JOptionPane.showMessageDialog(null, id + " 님의 계정을 삭제하였습니다.");
-					allUserList();
+				if(row == -1 || col == -1) {
+					JOptionPane.showMessageDialog(null, "회원을 선택해주세요.");
 				}
-				
+				else {
+					String id = uTable.getValueAt(row, 1).toString();
+					
+					int ans = JOptionPane.showConfirmDialog(null, id + " 님의 계정을 삭제하시겠습니까?", "회원 삭제창", JOptionPane.YES_NO_OPTION);
+					if(ans == 0) {
+						res = uDAO.getDeleteHoiwon(id);
+						if(res == 0) {
+							JOptionPane.showMessageDialog(null, "알 수 없는 오류로 삭제에 실패하였습니다.");
+						}
+						else JOptionPane.showMessageDialog(null, id + " 님의 계정을 삭제하였습니다.");
+						allUserList();
+					}
+				}
 			}
 		});
 		
@@ -652,7 +657,7 @@ public class AdminMain extends JFrame {
 		tableCellAlign(uTable);
 	}
 	
-	// 조건검색 항목 선택 후 입력필드 작성하면 수행될 내용
+	// 회원관리 조건검색 항목 선택 후 입력필드 작성하면 수행될 내용
 	private void getHoiwonSearchProcess() {
 		String cbChoice = cbHoiwonSearch.getSelectedItem().toString();
 		String txtSearchs = txtHoiwonSearch.getText();

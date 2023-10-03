@@ -144,7 +144,7 @@ public class BoardModi extends JFrame {
 				}
 				else if(content.trim().equals("")) {
 					JOptionPane.showMessageDialog(null, "수정하실 본문을 적어주세요.");
-					txtTitle.setText(bVO.getContent());
+					txtaContent.setText(bVO.getContent());
 					txtaContent.requestFocus();
 				}
 				else {

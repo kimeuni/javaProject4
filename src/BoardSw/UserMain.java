@@ -574,7 +574,7 @@ public class UserMain extends JFrame {
 				String address = txtaAddress.getText();
 				
 				if(name.trim().equals("")) {
-					JOptionPane.showMessageDialog(null, "수정한 성명을 입력해주세요.");
+					JOptionPane.showMessageDialog(null, "수정할 성명을 입력해주세요.");
 				}
 				else if(!Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$", pw)) {
 					JOptionPane.showMessageDialog(null, "비밀번호는 8~20자 사이, 소문자,대문자,숫자,특수문자를 1개 이상 입력해야 합니다.");
