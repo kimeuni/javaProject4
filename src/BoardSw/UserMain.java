@@ -134,11 +134,11 @@ public class UserMain extends JFrame {
 		lblMyP.setBounds(70, 10, 202, 33);
 		pnHoiwon.add(lblMyP);
 		
-		JPanel pnReport = new JPanel();
-		pnReport.setLayout(null);
-		pnReport.setBackground(new Color(5, 58, 163));
-		pnReport.setBounds(0, 265, 298, 53);
-		panel.add(pnReport);
+		JPanel pnDisplayBtn = new JPanel();
+		pnDisplayBtn.setLayout(null);
+		pnDisplayBtn.setBackground(new Color(5, 58, 163));
+		pnDisplayBtn.setBounds(0, 265, 298, 53);
+		panel.add(pnDisplayBtn);
 		
 		JLabel lblSecretImg = new JLabel("");
 		ImageIcon icon3 = new ImageIcon(UserMain.class.getResource("/longin/image/lock.png"));
@@ -147,14 +147,14 @@ public class UserMain extends JFrame {
 		ImageIcon updateIcon3 = new ImageIcon(updateImg3);
 		lblSecretImg.setIcon(updateIcon3);
 		lblSecretImg.setBounds(34, 10, 36, 33);
-		pnReport.add(lblSecretImg);
+		pnDisplayBtn.add(lblSecretImg);
 		
 		JLabel lblSecret = new JLabel("나만보기");
 		lblSecret.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSecret.setForeground(Color.WHITE);
 		lblSecret.setFont(new Font("굴림", Font.BOLD, 18));
 		lblSecret.setBounds(70, 10, 202, 33);
-		pnReport.add(lblSecret);
+		pnDisplayBtn.add(lblSecret);
 		
 		JPanel pnExit = new JPanel();
 		pnExit.setLayout(null);
@@ -485,6 +485,9 @@ public class UserMain extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				dispose();
 				new MainBoards(vo);
+				setUserBoardColor(pnMain);
+				refUserBoardColor(pnHoiwon);
+				refUserBoardColor(pnDisplayBtn);
 			}
 		});
 		
@@ -502,18 +505,24 @@ public class UserMain extends JFrame {
 				else {
 					pnMyP.setVisible(true);
 					pnDisplay.setVisible(false);
+					refUserBoardColor(pnMain);
+					setUserBoardColor(pnHoiwon);
+					refUserBoardColor(pnDisplayBtn);
 				}
 			}
 		});
 		
 		// 나만보기
-		pnReport.addMouseListener(new MouseAdapter() {
+		pnDisplayBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				pnMyP.setVisible(false);
 				pnDisplay.setVisible(true);
 				pnMyAllBoard.setVisible(false);
 				pnMyDisNo.setVisible(false);
+				refUserBoardColor(pnMain);
+				refUserBoardColor(pnHoiwon);
+				setUserBoardColor(pnDisplayBtn);
 			}
 		});
 		
@@ -602,6 +611,9 @@ public class UserMain extends JFrame {
 				txtAfterPw.setText(vo.getPw());
 				txtaAddress.setText(vo.getAddress());
 				pnMyP.setVisible(false);
+				refUserBoardColor(pnMain);
+				refUserBoardColor(pnHoiwon);
+				refUserBoardColor(pnDisplayBtn);
 			}
 		});
 		
@@ -634,6 +646,9 @@ public class UserMain extends JFrame {
 				pnDisplay.setVisible(false);
 				pnMyAllBoard.setVisible(false);
 				pnMyDisNo.setVisible(false);
+				refUserBoardColor(pnMain);
+				refUserBoardColor(pnHoiwon);
+				refUserBoardColor(pnDisplayBtn);
 			}
 		});
 		
@@ -728,5 +743,14 @@ public class UserMain extends JFrame {
 		for(int i=0; i<tcm.getColumnCount(); i++) {
 			tcm.getColumn(i).setCellRenderer(dtcr);	
 		}
+	}
+	
+	// 메인보드 버튼 색 바꾸기
+	private void setUserBoardColor(JPanel jPanel) {
+		jPanel.setBackground(new Color(51, 102, 204));
+	}
+	// 메인보드 버튼 색 원래대로 바꾸기
+	private void refUserBoardColor(JPanel jPanel) {
+		jPanel.setBackground(new Color(5, 58, 163));
 	}
 }

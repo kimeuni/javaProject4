@@ -83,7 +83,7 @@ public class MainBoards extends JFrame {
 		panel.setLayout(null);
 		
 		JPanel pnNoticesButton = new JPanel();
-		pnNoticesButton.setBackground(new Color(51, 102, 204));
+		pnNoticesButton.setBackground(new Color(5, 58, 163));
 		pnNoticesButton.setBounds(0, 160, 298, 53);
 		panel.add(pnNoticesButton);
 		pnNoticesButton.setLayout(null);
@@ -274,6 +274,8 @@ public class MainBoards extends JFrame {
 		
 		tableCellAlign(notTable);
 		
+		notListSize();
+		
 		scrollPaneNot = new JScrollPane(notTable);
 		scrollPaneNot.setBounds(0, 0, 712, 395);
 		pnNoticesBoard.add(scrollPaneNot);
@@ -359,6 +361,8 @@ public class MainBoards extends JFrame {
 		
 		tableCellAlign(boTable);
 		
+		boardListSize();
+		
 		scrollPaneBo = new JScrollPane(boTable);
 		scrollPaneBo.setBounds(0, 0, 712, 355);
 		pnBoards.add(scrollPaneBo);
@@ -416,6 +420,8 @@ public class MainBoards extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				pnNotices.setVisible(true);
 				pnBoard.setVisible(false);
+				setBoardColor(pnNoticesButton);
+				refBoardColor(pnHoiwon);
 			}
 		});
 		
@@ -425,6 +431,8 @@ public class MainBoards extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				pnNotices.setVisible(false);
 				pnBoard.setVisible(true);
+				refBoardColor(pnNoticesButton);
+				setBoardColor(pnHoiwon);
 				
 			}
 		});
@@ -502,6 +510,8 @@ public class MainBoards extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				pnNotices.setVisible(false);
 				allNoticesList();
+				refBoardColor(pnNoticesButton);
+				refBoardColor(pnHoiwon);
 			}
 		});
 		
@@ -544,6 +554,7 @@ public class MainBoards extends JFrame {
 				bData = dao.getBoardCategoryList("게임","Y");
 				boDtm.setDataVector(bData, BoardTitle);
 				tableCellAlign(boTable);
+				boardListSize();
 				btnCheck = 1;
 			}
 		});
@@ -555,6 +566,7 @@ public class MainBoards extends JFrame {
 				bData = dao.getBoardCategoryList("웹툰/소설","Y");
 				boDtm.setDataVector(bData, BoardTitle);
 				tableCellAlign(boTable);
+				boardListSize();
 				btnCheck = 2;
 			}
 		});
@@ -566,6 +578,7 @@ public class MainBoards extends JFrame {
 				bData = dao.getBoardCategoryList("인형","Y");
 				boDtm.setDataVector(bData, BoardTitle);
 				tableCellAlign(boTable);
+				boardListSize();
 				btnCheck = 3;
 			}
 		});
@@ -577,6 +590,7 @@ public class MainBoards extends JFrame {
 				bData = dao.getBoardCategoryList("운동","Y");
 				boDtm.setDataVector(bData, BoardTitle);
 				tableCellAlign(boTable);
+				boardListSize();
 				btnCheck = 4;
 			}
 		});
@@ -588,6 +602,7 @@ public class MainBoards extends JFrame {
 				bData = dao.getBoardCategoryList("패션","Y");
 				boDtm.setDataVector(bData, BoardTitle);
 				tableCellAlign(boTable);
+				boardListSize();
 				btnCheck = 5;
 			}
 		});
@@ -629,6 +644,8 @@ public class MainBoards extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				pnBoard.setVisible(false);
 				rdAll.doClick();
+				refBoardColor(pnNoticesButton);
+				refBoardColor(pnHoiwon);
 			}
 		});
 		
@@ -638,6 +655,7 @@ public class MainBoards extends JFrame {
 				bData = dao.getBoardList("공지사항","Y");
 				boDtm.setDataVector(bData, BoardTitle);
 				tableCellAlign(boTable);
+				boardListSize();
 				rdAll.setSelected(true);
 			}
 		});
@@ -676,6 +694,7 @@ public class MainBoards extends JFrame {
 		nData = dao.getNotBoardList("category","공지사항","Y");
 		notDtm.setDataVector(nData, noticesTitle);
 		tableCellAlign(notTable);
+		notListSize();
 	}
 	
 	// 게시판 조건검색 항목 선택 후 입력필드 작성하면 수행될 내용
@@ -698,36 +717,42 @@ public class MainBoards extends JFrame {
 				else if(cbChoiceB.equals("닉네임")) bData = dao.getBoardCondiSeatch("nickName", txtCondiB, "게임","Y");
 				boDtm.setDataVector(bData, BoardTitle);
 				tableCellAlign(boTable);
+				boardListSize();
 				break;
 			case 2:
 				if(cbChoiceB.equals("제목")) bData = dao.getBoardCondiSeatch("title", txtCondiB, "웹툰/소설","Y");
 				else if(cbChoiceB.equals("닉네임")) bData = dao.getBoardCondiSeatch("nickName", txtCondiB, "웹툰/소설","Y");
 				boDtm.setDataVector(bData, BoardTitle);
 				tableCellAlign(boTable);
+				boardListSize();
 				break;
 			case 3:
 				if(cbChoiceB.equals("제목")) bData = dao.getBoardCondiSeatch("title", txtCondiB, "인형","Y");
 				else if(cbChoiceB.equals("닉네임")) bData = dao.getBoardCondiSeatch("nickName", txtCondiB, "인형","Y");
 				boDtm.setDataVector(bData, BoardTitle);
 				tableCellAlign(boTable);
+				boardListSize();
 				break;
 			case 4:
 				if(cbChoiceB.equals("제목")) bData = dao.getBoardCondiSeatch("title", txtCondiB, "운동","Y");
 				else if(cbChoiceB.equals("닉네임")) bData = dao.getBoardCondiSeatch("nickName", txtCondiB, "운동","Y");
 				boDtm.setDataVector(bData, BoardTitle);
 				tableCellAlign(boTable);
+				boardListSize();
 				break;
 			case 5:
 				if(cbChoiceB.equals("제목")) bData = dao.getBoardCondiSeatch("title", txtCondiB, "패션","Y");
 				else if(cbChoiceB.equals("닉네임")) bData = dao.getBoardCondiSeatch("nickName", txtCondiB, "패션","Y");
 				boDtm.setDataVector(bData, BoardTitle);
 				tableCellAlign(boTable);
+				boardListSize();
 				break;
 			default:
 				if(cbChoiceB.equals("제목")) bData = dao.getBoardCondiallSeatch("title", txtCondiB,"공지사항", "Y");
 				else if(cbChoiceB.equals("닉네임")) bData = dao.getBoardCondiallSeatch("nickName", txtCondiB, "공지사항", "Y");
 				boDtm.setDataVector(bData, BoardTitle);
 				tableCellAlign(boTable);
+				boardListSize();
 				break;
 		}
 	}
@@ -749,5 +774,37 @@ public class MainBoards extends JFrame {
 		else if(cbChoiceN.equals("닉네임")) nData = dao.getNotBoardCondiSeatch("nickName", txtCondiN ,"공지사항", "Y");
 		notDtm.setDataVector(nData, noticesTitle);
 		tableCellAlign(notTable);
+		notListSize();
+	}
+	
+	// 공지사항 사이즈 바꾸기
+	private void notListSize() {
+		notTable.getColumnModel().getColumn(0).setMaxWidth(50);
+		notTable.getColumnModel().getColumn(1).setMaxWidth(120);
+		notTable.getColumnModel().getColumn(2).setMaxWidth(400);
+		notTable.getColumnModel().getColumn(3).setMaxWidth(160);
+		notTable.getColumnModel().getColumn(4).setMaxWidth(130);
+		notTable.getColumnModel().getColumn(5).setMaxWidth(50);
+		notTable.getColumnModel().getColumn(6).setMaxWidth(50);
+	}
+	
+	// 게시판 사이즈 바꾸기
+	private void boardListSize() {
+		boTable.getColumnModel().getColumn(0).setMaxWidth(50);
+		boTable.getColumnModel().getColumn(1).setMaxWidth(120);
+		boTable.getColumnModel().getColumn(2).setMaxWidth(400);
+		boTable.getColumnModel().getColumn(3).setMaxWidth(160);
+		boTable.getColumnModel().getColumn(4).setMaxWidth(130);
+		boTable.getColumnModel().getColumn(5).setMaxWidth(50);
+		boTable.getColumnModel().getColumn(6).setMaxWidth(50);
+	}
+	
+	// 메인보드 버튼 색 바꾸기
+	private void setBoardColor(JPanel jPanel) {
+		jPanel.setBackground(new Color(51, 102, 204));
+	}
+	// 메인보드 버튼 색 원래대로 바꾸기
+	private void refBoardColor(JPanel jPanel) {
+		jPanel.setBackground(new Color(5, 58, 163));
 	}
 }

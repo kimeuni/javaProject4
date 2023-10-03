@@ -348,6 +348,8 @@ public class AdminMain extends JFrame {
 		
 		tableCellAlign(rTable);
 		
+		reportListSize();
+		
 		JPanel panel_1_3 = new JPanel();
 		panel_1_3.setBounds(0, 466, 712, 51);
 		pnHoiwonReport.add(panel_1_3);
@@ -382,6 +384,9 @@ public class AdminMain extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				dispose();
 				new MainBoards(vo);
+				setBoardColor(pnMain);
+				refBoardColor(pnHoiwon);
+				refBoardColor(pnReport);
 			}
 		});
 		
@@ -391,6 +396,9 @@ public class AdminMain extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				pnHoiwonCare.setVisible(true);
 				pnHoiwonReport.setVisible(false);
+				refBoardColor(pnMain);
+				setBoardColor(pnHoiwon);
+				refBoardColor(pnReport);
 				
 			}
 		});
@@ -401,6 +409,9 @@ public class AdminMain extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				pnHoiwonCare.setVisible(false);
 				pnHoiwonReport.setVisible(true);
+				refBoardColor(pnMain);
+				refBoardColor(pnHoiwon);
+				setBoardColor(pnReport);
 			}
 		});
 		
@@ -429,6 +440,9 @@ public class AdminMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				pnHoiwonCare.setVisible(false);
 				allUserList();
+				refBoardColor(pnMain);
+				refBoardColor(pnHoiwon);
+				refBoardColor(pnReport);
 			}
 		});
 		
@@ -508,6 +522,9 @@ public class AdminMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				pnHoiwonReport.setVisible(false);
 				allReportList();
+				refBoardColor(pnMain);
+				refBoardColor(pnHoiwon);
+				refBoardColor(pnReport);
 			}
 		});
 		
@@ -566,18 +583,25 @@ public class AdminMain extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int row = rTable.getSelectedRow();
+				int col = rTable.getSelectedColumn();
 				
-				bVO.setIdx((int)rTable.getValueAt(row, 0));
-				bVO.setTitle(rTable.getValueAt(row, 2).toString());
-				bVO.setNickName(rTable.getValueAt(row, 3).toString());
-				
-				int ans = JOptionPane.showConfirmDialog(null,"신고된 게시글을 삭제하시겠습니까?","신고게시판 삭제", JOptionPane.YES_NO_OPTION);
-				if(ans == 0) {
-					res = bDAO.setBoardDelet(bVO);
-					if(res == 0){JOptionPane.showMessageDialog(null, "알 수 없는 오류로 삭제에 실패하였습니다.");
+				if(row == -1 || col == -1) {
+					JOptionPane.showMessageDialog(null, "게시글을 선택해주세요.");
+				}
+				else {
+					bVO = new BoardVO();
+					bVO.setIdx((int)rTable.getValueAt(row, 0));
+					bVO.setTitle(rTable.getValueAt(row, 2).toString());
+					bVO.setNickName(rTable.getValueAt(row, 3).toString());
+					
+					int ans = JOptionPane.showConfirmDialog(null,"신고된 게시글을 삭제하시겠습니까?","신고게시판 삭제", JOptionPane.YES_NO_OPTION);
+					if(ans == 0) {
+						res = bDAO.setBoardDelet(bVO);
+						if(res == 0){JOptionPane.showMessageDialog(null, "알 수 없는 오류로 삭제에 실패하였습니다.");
+						}
+						else JOptionPane.showMessageDialog(null, "신고된 게시글을 삭제했습니다.");
+						allReportList();
 					}
-					else JOptionPane.showMessageDialog(null, "신고된 게시글을 삭제했습니다.");
-					allReportList();
 				}
 			}
 		});
@@ -618,6 +642,7 @@ public class AdminMain extends JFrame {
 		reportData = bDAO.getReportTableList("공지사항","Y","Y");
 		bDtm.setDataVector(reportData, reportTitle);
 		tableCellAlign(rTable);
+		reportListSize();
 	}
 	
 	// 전체 유저 리스트 호출
@@ -673,5 +698,26 @@ public class AdminMain extends JFrame {
 		else if(cbChoice.equals("닉네임")) reportData = bDAO.getReportCondiSeatch("nickName", txtSearchs, "Y");
 		bDtm.setDataVector(reportData, reportTitle);
 		tableCellAlign(rTable);
+		reportListSize();
+	}
+	
+	// 리스트 사이즈 바꾸기
+	private void reportListSize() {
+		rTable.getColumnModel().getColumn(0).setMaxWidth(50);
+		rTable.getColumnModel().getColumn(1).setMaxWidth(120);
+		rTable.getColumnModel().getColumn(2).setMaxWidth(400);
+		rTable.getColumnModel().getColumn(3).setMaxWidth(160);
+		rTable.getColumnModel().getColumn(4).setMaxWidth(130);
+		rTable.getColumnModel().getColumn(5).setMaxWidth(50);
+		rTable.getColumnModel().getColumn(6).setMaxWidth(50);
+	}
+	
+	// 메인보드 버튼 색 바꾸기
+	private void setBoardColor(JPanel jPanel) {
+		jPanel.setBackground(new Color(153, 0, 255));
+	}
+	// 메인보드 버튼 색 원래대로 바꾸기
+	private void refBoardColor(JPanel jPanel) {
+		jPanel.setBackground(new Color(80, 4, 135));
 	}
 }
