@@ -30,6 +30,7 @@ public class setUpdateNotices extends JFrame {
 	private JComboBox cbcategory;
 	private JTextArea txtaContent;
 	private ImageFileUpdate imageFileUpdate;
+	private ImageFileUpdate imageFileUpdate1;
 	
 	BoardDAO dao = new BoardDAO();
 	BoardVO bVO = null;
@@ -41,6 +42,7 @@ public class setUpdateNotices extends JFrame {
 		setSize(500, 670);
 		setLocationRelativeTo(null);
 		
+		imageFileUpdate = new ImageFileUpdate();	//처음 글쓰기를 누를 때 이미지 업로드하는 클래스 또한 생성한다. (생성했을 때 보이지 않도록 imageFileUpdate에서 setVisible(false)로 한다)
 		setVisible(true);
 		
 		contentPane = new JPanel();
@@ -119,17 +121,52 @@ public class setUpdateNotices extends JFrame {
 		pnFile.add(btnFileUpdate);
 		
 		/* ================================================= */
-		
 		// 파일 업로드 버튼
 		btnFileUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(imageFileUpdate == null) {
+				if(imageFileUpdate1 == null) {
 					imageFileUpdate = new ImageFileUpdate();
 				}
-				txtFileName.setText(imageFileUpdate.getImgUP());
-				System.out.println(txtFileName.getText());
+				if(imageFileUpdate.getImgUP() == null) {
+					imageFileUpdate.setVisible(true);	// imageFileUpdate클래스의 ImgUP() 메소드 값이 null이면 imageFileUpdate를 보여준다.
+				}
+				else {
+					txtFileName.setText(imageFileUpdate.getImgUP());
+					System.out.println(txtFileName.getText());
+				}
 			}
 		});
+		
+		
+//		// 파일 업로드 버튼
+//		btnFileUpdate.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				if(imageFileUpdate1 == null) {
+//					//imageFileUpdate = new ImageFileUpdate();
+//					imageFileUpdate1= new ImageFileUpdate();
+//					imageFileUpdate1.setVisible(true);
+//					
+//					System.out.println("A imageFileUpdate + "+imageFileUpdate.hashCode());
+//					System.out.println("A imageFileUpdate1 + "+imageFileUpdate1.hashCode());
+//				}
+//				if(imageFileUpdate.getImgUP() == null) {
+//					//imageFileUpdate = new ImageFileUpdate();
+//					imageFileUpdate.setVisible(true);
+//					
+//					if(imageFileUpdate1.getImgUP() == null) {
+//					}
+//						
+//					System.out.println("imageFileUpdate + "+imageFileUpdate.hashCode());
+//					System.out.println("imageFileUpdate1 + "+imageFileUpdate1.hashCode());
+//				}
+//				else {
+//					System.out.println("2 imageFileUpdate + "+imageFileUpdate.hashCode());
+//					System.out.println("2 imageFileUpdate1 + "+imageFileUpdate1.hashCode());
+//					txtFileName.setText(imageFileUpdate.getImgUP());
+//					System.out.println(txtFileName.getText());
+//				}
+//			}
+//		});
 		
 		// 작성완료 버튼
 		btnFinish.addActionListener(new ActionListener() {

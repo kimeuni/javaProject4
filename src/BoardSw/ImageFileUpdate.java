@@ -53,7 +53,7 @@ public class ImageFileUpdate extends JFrame {
 		setSize(600, 400);
 		setLocationRelativeTo(null);
 		
-		setVisible(true);
+		setVisible(false);
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -224,6 +224,7 @@ public class ImageFileUpdate extends JFrame {
 	
 	/*===========================================================================*/
 	public String getImgUP() {
+		System.out.println("getImgUP table : "+table.hashCode());
 		int row = table.getSelectedRow();
 		int col = table.getSelectedColumn();
 		if(row != -1 && col != -1) {
